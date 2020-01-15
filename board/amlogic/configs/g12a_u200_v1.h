@@ -84,22 +84,22 @@
         "upgrade_step=0\0"\
         "jtag=disable\0"\
         "loadaddr=1080000\0"\
-        "panel_type=lcd_1\0" \
+        "panel_type=lcd_7\0" \
         "outputmode=1080p60hz\0" \
         "hdmimode=1080p60hz\0" \
         "colorattribute=444,8bit\0"\
         "cvbsmode=576cvbs\0" \
-        "display_width=1920\0" \
-        "display_height=1080\0" \
-        "display_bpp=16\0" \
-        "display_color_index=16\0" \
+        "display_width=480\0" \
+        "display_height=800\0" \
+        "display_bpp=24\0" \
+        "display_color_index=24\0" \
         "display_layer=osd0\0" \
-        "display_color_fg=0xffff\0" \
+        "display_color_fg=0xffffff\0" \
         "display_color_bg=0\0" \
         "dtb_mem_addr=0x1000000\0" \
         "fb_addr=0x3d800000\0" \
-        "fb_width=1920\0" \
-        "fb_height=1080\0" \
+        "fb_width=480\0" \
+        "fb_height=800\0" \
         "frac_rate_policy=1\0" \
         "hdmi_read_edid=1\0" \
         "usb_burning=update 1000\0" \
@@ -494,6 +494,7 @@
 #define CONFIG_AML_LCD    1
 #define CONFIG_AML_LCD_TABLET 1
 #define CONFIG_AML_LCD_EXTERN 1
+#define CONFIG_AML_LCD_EXTERN_MIPI_ILI9806E 1
 
 /* USB
  * Enable CONFIG_MUSB_HCD for Host functionalities MSC, keyboard
