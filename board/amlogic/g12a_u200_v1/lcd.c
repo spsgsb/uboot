@@ -23,7 +23,6 @@
 
 static char lcd_cpu_gpio[LCD_CPU_GPIO_NUM_MAX][LCD_CPU_GPIO_NAME_MAX] = {
 	"GPIOZ_5", /* panel rst */
-	"GPIOZ_6", /* panel power */
 	"invalid", /* ending flag */
 };
 
