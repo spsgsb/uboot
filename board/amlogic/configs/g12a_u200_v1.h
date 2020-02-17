@@ -257,7 +257,7 @@
             "else "\
                 "setenv reboot_mode_android ""normal"";"\
                 "run storeargs;"\
-                "osd open;osd clear;imgread pic logo bootup $loadaddr;bmp display $bootup_offset;bmp scale;vout output ${outputmode};"\
+                "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode};"\
             "fi;fi;"\
             "\0"\
         "cmdline_keys="\
