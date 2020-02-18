@@ -474,7 +474,7 @@
 //#define CONFIG_VPU_CLK_LEVEL_DFT 7
 
 /* DISPLAY & HDMITX */
-#define CONFIG_AML_HDMITX20 1
+#undef CONFIG_AML_HDMITX20
 #define CONFIG_AML_CANVAS 1
 #define CONFIG_AML_VOUT 1
 #define CONFIG_AML_OSD 1
@@ -483,7 +483,7 @@
 #define CONFIG_AML_MINUI 1
 
 #if defined(CONFIG_AML_VOUT)
-#define CONFIG_AML_CVBS 1
+#undef CONFIG_AML_CVBS
 #endif
 
 #define CONFIG_AML_LCD    1
