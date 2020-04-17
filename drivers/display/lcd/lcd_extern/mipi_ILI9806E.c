@@ -180,8 +180,7 @@ static unsigned char mipi_init_on_table[] = {
       0x15, 2, 0xE1, 0x79,    /*  RS: Time Control[3:0] E1h P.275 */
                      /*  RS: TIME_SHIFT_ERR[3:0] 0b0111 "Timming option"? */
    0x39, 6, 0xFF, 0xFF, 0x98, 0x06, 0x04, 0x00, /*  Change to Page 0 CMD for Normal command     RS: Page 0 */
-      0x15, 2, 0x3A, 0x50,    /*  RS: Interface Pixel Format 3Ah P.164  */
-                     /* 16BIT    RS: 0b101 16-bit / pixel */
+      0x15, 2, 0x3A, 0x70,    /*  RS: Interface Pixel Format 3Ah P.164  */
                      /* 24BIT    RS: 0b111 24-bit / pixel */
       0x05, 1, 0x11, /*  RS: Sleep out 11h P.151 */
       0xfd, 1, 120, /*  RS: 120ms wait is required    delay(ms)*/

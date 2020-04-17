@@ -22,8 +22,7 @@
 #endif
 
 static char lcd_cpu_gpio[LCD_CPU_GPIO_NUM_MAX][LCD_CPU_GPIO_NAME_MAX] = {
-	"GPIOZ_9", /* panel rst */
-	"GPIOZ_8", /* panel power */
+	"GPIOZ_5", /* panel rst */
 	"invalid", /* ending flag */
 };
 
@@ -96,6 +95,18 @@ static struct lcd_power_step_s lcd_power_off_step_TL070WSH27[] = {
 	{LCD_POWER_TYPE_SIGNAL,0,0,10,},  /* signal */
 	{LCD_POWER_TYPE_CPU,   0,0,10,}, /* lcd_reset */
 	{LCD_POWER_TYPE_CPU,   1,1,100,}, /* power off */
+	{LCD_POWER_TYPE_MAX,   0,0,0,},   /* ending flag */
+};
+static struct lcd_power_step_s lcd_power_on_step_ILI9806E[] = {
+	{LCD_POWER_TYPE_CPU,   0,1,1,},
+	{LCD_POWER_TYPE_CPU,   0,0,10,},
+	{LCD_POWER_TYPE_CPU,   0,1,120,},
+	{LCD_POWER_TYPE_SIGNAL,0,0,200,},  /* signal */
+	{LCD_POWER_TYPE_MAX,   0,0,0,},  /* ending flag */
+};
+static struct lcd_power_step_s lcd_power_off_step_ILI9806E[] = {
+	{LCD_POWER_TYPE_SIGNAL,0,0,150,},  /* signal */
+	{LCD_POWER_TYPE_CPU,   0,0,120,}, /* lcd_reset */
 	{LCD_POWER_TYPE_MAX,   0,0,0,},   /* ending flag */
 };
 
@@ -232,6 +243,24 @@ struct ext_lcd_config_s ext_lcd_config[LCD_NUM_MAX] = {
 	Rsv_val,Rsv_val,Rsv_val,Rsv_val,
 	10,10,Rsv_val},
 
+	{/* ILI9806E*/
+	"lcd_7",LCD_MIPI,8,
+	/* basic timing */
+	480,800,630,836,10,50,0,4,20,0,
+	/* clk_attr */
+	0,0,1,31600800,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,
+	/* MIPI_attr: lane_num, bit_rate_max, factor, operation_mode_init, operation_mode_display, video_mode_type, clk_always_hs, phy_switch */
+	2,0,0,1,0,2,1,0,Rsv_val,Rsv_val,
+	/* power step */
+	lcd_power_on_step_ILI9806E, lcd_power_off_step_ILI9806E,
+	/* backlight */
+	100,255,10,128,128,
+	BL_CTRL_PWM,0,1,0,200,200,
+	BL_PWM_NEGATIVE,BL_PWM_F,180,100,25,1,1,
+	Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,
+	Rsv_val,Rsv_val,Rsv_val,Rsv_val,
+	10,10,Rsv_val},
+
 	{.panel_type = "invalid"},
 };
 
@@ -316,6 +345,18 @@ static unsigned char mipi_init_off_table_TL070WSH27[DSI_INIT_OFF_MAX] = {//table
 	0x05, 1, 0x10,
 	0xfd, 1, 10,
 	0xff, 0,   //ending
+};
+static unsigned char mipi_init_on_table_ILI9806E[DSI_INIT_ON_MAX] = {//table size < 100
+	0x05, 1, 0x11,
+	0xfd, 1, 120,
+	0x05, 1, 0x29,
+	0xff, 0xff,
+};
+static unsigned char mipi_init_off_table_ILI9806E[DSI_INIT_OFF_MAX] = {//table size < 50
+	0x05, 1, 0x28,
+	0xfd, 1, 10,
+	0x05, 1, 0x10,
+	0xff, 0,
 };
 
 static struct dsi_config_s lcd_mipi_config = {
@@ -518,6 +559,17 @@ struct lcd_extern_config_s ext_config_dtf[LCD_EXTERN_NUM_MAX] = {
 		.table_init_off_cnt = sizeof(ext_init_off_table_P070ACB_FT),
 	},
 	{
+		.index = 6,
+		.name = "mipi_ILI9806E",
+		.type = LCD_EXTERN_MIPI, /* LCD_EXTERN_I2C, LCD_EXTERN_SPI, LCD_EXTERN_MIPI, LCD_EXTERN_MAX */
+		.status = 1, /* 0=disable, 1=enable */
+		.cmd_size = LCD_EXT_CMD_SIZE_DYNAMIC,
+		.table_init_on = ext_init_on_table_ILI9806E,
+		.table_init_on_cnt = sizeof(ext_init_on_table_ILI9806E),
+		.table_init_off = ext_init_off_table_ILI9806E,
+		.table_init_off_cnt = sizeof(ext_init_off_table_ILI9806E),
+	},
+	{
 		.index = LCD_EXTERN_INDEX_INVALID,
 	},
 };
@@ -606,6 +658,10 @@ void lcd_config_bsp_init(void)
 				case 4:
 					lcd_mipi_config.dsi_init_on = mipi_init_on_table_TL070WSH27;
 					lcd_mipi_config.dsi_init_off = mipi_init_off_table_TL070WSH27;
+					break;
+				case 7:
+					lcd_mipi_config.dsi_init_on = mipi_init_on_table_ILI9806E;
+					lcd_mipi_config.dsi_init_off = mipi_init_off_table_ILI9806E;
 					break;
 				case 0:
 				default:

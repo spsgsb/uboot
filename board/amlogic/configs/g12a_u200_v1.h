@@ -84,24 +84,20 @@
         "upgrade_step=0\0"\
         "jtag=disable\0"\
         "loadaddr=1080000\0"\
-        "panel_type=lcd_1\0" \
-        "outputmode=1080p60hz\0" \
-        "hdmimode=1080p60hz\0" \
-        "colorattribute=444,8bit\0"\
-        "cvbsmode=576cvbs\0" \
-        "display_width=1920\0" \
-        "display_height=1080\0" \
+        "panel_type=lcd_7\0" \
+        "outputmode=panel\0" \
+        "display_width=480\0" \
+        "display_height=800\0" \
         "display_bpp=16\0" \
         "display_color_index=16\0" \
         "display_layer=osd0\0" \
-        "display_color_fg=0xffff\0" \
+        "display_color_fg=0xffffff\0" \
         "display_color_bg=0\0" \
         "dtb_mem_addr=0x1000000\0" \
         "fb_addr=0x3d800000\0" \
-        "fb_width=1920\0" \
-        "fb_height=1080\0" \
+        "fb_width=480\0" \
+        "fb_height=800\0" \
         "frac_rate_policy=1\0" \
-        "hdmi_read_edid=1\0" \
         "usb_burning=update 1000\0" \
         "fdt_high=0x20000000\0"\
         "try_auto_burn=update 700 750;\0"\
@@ -112,7 +108,6 @@
         "EnableSelinux=enforcing\0" \
         "recovery_part=recovery\0"\
         "recovery_offset=0\0"\
-        "cvbs_drv=0\0"\
         "osd_reverse=0\0"\
         "video_reverse=0\0"\
         "lock=10001000\0"\
@@ -131,7 +126,7 @@
             "else fi;"\
             "\0"\
         "storeargs="\
-            "setenv bootargs ${initargs} ${fs_type} reboot_mode_android=${reboot_mode_android} logo=${display_layer},loaded,${fb_addr} vout=${outputmode},enable panel_type=${panel_type} hdmitx=${cecconfig},${colorattribute} hdmimode=${hdmimode} frac_rate_policy=${frac_rate_policy} hdmi_read_edid=${hdmi_read_edid} cvbsmode=${cvbsmode} osd_reverse=${osd_reverse} video_reverse=${video_reverse} irq_check_en=${Irq_check_en}  androidboot.selinux=${EnableSelinux} androidboot.firstboot=${firstboot} jtag=${jtag}; "\
+            "setenv bootargs ${initargs} ${fs_type} reboot_mode_android=${reboot_mode_android} logo=${display_layer},loaded,${fb_addr} vout=${outputmode},enable panel_type=${panel_type} frac_rate_policy=${frac_rate_policy} osd_reverse=${osd_reverse} video_reverse=${video_reverse} irq_check_en=${Irq_check_en}  androidboot.selinux=${EnableSelinux} androidboot.firstboot=${firstboot} jtag=${jtag}; "\
 	"setenv bootargs ${bootargs} androidboot.hardware=amlogic;"\
             "run cmdline_keys;"\
             "\0"\
@@ -262,7 +257,7 @@
             "else "\
                 "setenv reboot_mode_android ""normal"";"\
                 "run storeargs;"\
-                "hdmitx hpd;hdmitx get_preferred_mode;osd open;osd clear;imgread pic logo bootup $loadaddr;bmp display $bootup_offset;bmp scale;vout output ${outputmode};"\
+                "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode};"\
             "fi;fi;"\
             "\0"\
         "cmdline_keys="\
@@ -479,7 +474,7 @@
 //#define CONFIG_VPU_CLK_LEVEL_DFT 7
 
 /* DISPLAY & HDMITX */
-#define CONFIG_AML_HDMITX20 1
+#undef CONFIG_AML_HDMITX20
 #define CONFIG_AML_CANVAS 1
 #define CONFIG_AML_VOUT 1
 #define CONFIG_AML_OSD 1
@@ -488,12 +483,13 @@
 #define CONFIG_AML_MINUI 1
 
 #if defined(CONFIG_AML_VOUT)
-#define CONFIG_AML_CVBS 1
+#undef CONFIG_AML_CVBS
 #endif
 
 #define CONFIG_AML_LCD    1
 #define CONFIG_AML_LCD_TABLET 1
 #define CONFIG_AML_LCD_EXTERN 1
+#define CONFIG_AML_LCD_EXTERN_MIPI_ILI9806E 1
 
 /* USB
  * Enable CONFIG_MUSB_HCD for Host functionalities MSC, keyboard
