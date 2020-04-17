@@ -678,6 +678,7 @@ static int lcd_config_probe(void)
 int lcd_probe(void)
 {
 #ifdef LCD_DEBUG_INFO
+	int ret = 0;
 	lcd_debug_print_flag = 1;
 #else
 	char *str;
