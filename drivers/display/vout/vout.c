@@ -180,9 +180,9 @@ static const vout_set_t vout_sets[] = {
 	{ /* VMODE_LCD */
 		.name              = "panel",
 		.mode              = VMODE_LCD,
-		.width             = 1920,
-		.height            = 1080,
-		.field_height      = 1080,
+		.width             = 480,
+		.height            = 800,
+		.field_height      = 800,
 	},
 	{ /* VMODE_640x480p60hz */
 		.name              = "640x480p60hz",

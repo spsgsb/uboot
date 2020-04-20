@@ -308,7 +308,12 @@ static int do_store_dtb_ops(cmd_tbl_t * cmdtp, int flag, int argc, char * const 
 						return CMD_RET_FAILURE;
 		}
 
-		sprintf(_cmdBuf, "%s %s %s 0x%x", devCmd, ops, dtbLoadaddr, actualDtbSz);
+		if (device_boot_flag == EMMC_BOOT_FLAG) {
+			ops = is_write ? "write" : "read";
+			sprintf(_cmdBuf, "amlmmc %s dtbo 0x%s 0 0x%x", ops, dtbLoadaddr, actualDtbSz);
+		} else {
+			sprintf(_cmdBuf, "%s %s %s 0x%x", devCmd, ops, dtbLoadaddr, actualDtbSz);
+		}
 		MsgP("To run cmd[%s]\n", _cmdBuf);
 		ret = run_command(_cmdBuf, 0);
 
