@@ -621,6 +621,7 @@
 #define CONFIG_CMD_LOADB    1
 
 #define CONFIG_MULTI_DTB    1
+#define CONFIG_DTB_BIND_KERNEL
 
 /* debug mode defines */
 //#define CONFIG_DEBUG_MODE           1
