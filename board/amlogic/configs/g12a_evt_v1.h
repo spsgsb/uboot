@@ -301,7 +301,25 @@
 			"run update;\n" \
 			"fi;fi;" \
 		"fi;\0" \
-
+	"check_charger="\
+		"mw 0xFF6346DC 0x33000000;"\
+        "mw.b 0x1337DEAD 0x00 1;"\
+        "mw.b 0x1330DEAD 0x12 1;"\
+        "mw.b 0x1331DEAD 0x13 1;"\
+        "mw.b 0x1332DEAD 0x15 1;"\
+        "i2c dev 2;" \
+		"i2c read 0x35 0x3 1 0x1337DEAD;"\
+        "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
+            "run storeboot;"\
+        "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
+            "run storeboot;"\
+        "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
+            "run storeboot;"\
+        "else "\
+            "osd open;osd clear;imgread pic logo bad_charger $loadaddr;bmp display $bad_charger_offset;bmp scale;vout output ${outputmode};"\
+            "while true; do sleep 1; if gpio input GPIOAO_3; then run storeboot; fi; done;"\
+        "fi;"\
+        "\0"\
 
 #define CONFIG_PREBOOT  \
             "run bcb_cmd; "\
@@ -314,7 +332,7 @@
             "bcb uboot-command;"\
             "run switch_bootmode;"
 
-#define CONFIG_BOOTCOMMAND "run storeboot"
+#define CONFIG_BOOTCOMMAND "run check_charger"
 
 //#define CONFIG_ENV_IS_NOWHERE  1
 #define CONFIG_ENV_SIZE   (64*1024)
@@ -560,9 +578,12 @@
 	#define CONFIG_NETMASK         255.255.255.0
 #endif /* (CONFIG_CMD_NET) */
 
+#define CONFIG_DM_GPIO 1
+#define CONFIG_AML_GPIO 1
+
 /* other devices */
 /* I2C DM driver*/
-//#define CONFIG_DM_I2C
+#define CONFIG_DM_I2C 1
 
 #if defined(CONFIG_DM_I2C)
 #define CONFIG_SYS_I2C_MESON		1
