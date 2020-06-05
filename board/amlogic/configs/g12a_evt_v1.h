@@ -112,13 +112,14 @@
         "osd_reverse=0\0"\
         "video_reverse=0\0"\
         "lock=10001000\0"\
-        "active_slot=normal\0"\
+        "active_slot=_a\0"\
+        "avb2=0\0"\
         "boot_part=boot\0"\
         "reboot_mode_android=""normal""\0"\
         "Irq_check_en=0\0"\
         "fs_type=""rootfstype=ramfs""\0"\
         "initargs="\
-            "init=/init console=ttyS0,115200 no_console_suspend earlycon=aml-uart,0xff803000 ramoops.pstore_en=1 ramoops.record_size=0x8000 ramoops.console_size=0x4000 "\
+            "init=/init console=ttyS0,115200 no_console_suspend earlycon=aml-uart,0xff803000 ramoops.pstore_en=1 ramoops.record_size=0x8000 ramoops.console_size=0x4000 rootfstype=ext4"\
             "\0"\
         "upgrade_check="\
             "echo upgrade_step=${upgrade_step}; "\
@@ -175,9 +176,9 @@
             "fi;"\
             "if test ${avb2} = 0; then "\
                 "if test ${active_slot} = _a; then "\
-                    "setenv bootargs ${bootargs} root=/dev/mmcblk0p23;"\
+                    "setenv bootargs ${bootargs} root=/dev/system_a;"\
                 "else if test ${active_slot} = _b; then "\
-                    "setenv bootargs ${bootargs} root=/dev/mmcblk0p24;"\
+                    "setenv bootargs ${bootargs} root=/dev/system_b;"\
                 "fi;fi;"\
             "fi;"\
             "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
