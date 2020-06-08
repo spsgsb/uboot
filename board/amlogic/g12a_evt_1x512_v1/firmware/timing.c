@@ -63,7 +63,7 @@ ddr_set_t __ddr_setting[] = {
 	/* g12a skt (u209) ddr3 */
 	.board_id				= CONFIG_BOARD_ID_MASK,
 	.version				= 1,
-	.dram_rank_config		= CONFIG_DDR0_32BIT_RANK0_CH0,
+	.dram_rank_config		= CONFIG_DDR0_16BIT_CH0,
 	.DramType				= CONFIG_DDR_TYPE_DDR3,
 	.DRAMFreq				= {912, 0, 0, 0},
 	.ddr_base_addr			= CFG_DDR_BASE_ADDR,
@@ -71,7 +71,7 @@ ddr_set_t __ddr_setting[] = {
 	.imem_load_addr			= 0xFFFC0000, //sram
 	.dmem_load_size			= 0x1000, //4K
 
-	.DisabledDbyte			= 0xf0,
+	.DisabledDbyte			= 0xfc,
 	.Is2Ttiming				= 1,
 	.HdtCtrl				= 0xC8,
 	.dram_cs0_size_MB		= 0xffff,
@@ -102,16 +102,7 @@ ddr_set_t __ddr_setting[] = {
 	.ac_trace_delay			= {32,32,32,32,32,32,32,32,32,32},
 	//{00,00},
 	.ac_pinmux				= {00,00},
-#if 1
-	.ddr_dmc_remap			= {
-							[0] = ( 5 |  7 << 5 |  8 << 10 |  9 << 15 | 10 << 20 | 11 << 25 ),
-							[1] = ( 12|  0 << 5 |  0 << 10 | 14 << 15 | 15 << 20 | 16 << 25 ),
-							[2] = ( 17| 18 << 5 | 19 << 10 | 21 << 15 | 22 << 20 | 23 << 25 ),
-							[3] = ( 24| 25 << 5 | 26 << 10 | 27 << 15 | 28 << 20 | 29 << 25 ),
-							[4] = ( 30| 13 << 5 | 20 << 10 |  6 << 15 |  0 << 20 |  0 << 25 ),
-	},
-#else
-	//16bit
+	// 1 chip - 16-bit
 	.ddr_dmc_remap			= {
 							[0] = ( 0 |  5  << 5  |  6  << 10  |   7 << 15  |   8 << 20  |   9 << 25 ),
 							[1] = ( 10|  0  << 5  |  0  << 10  |  14 << 15  |  15 << 20  |  16 << 25 ),
@@ -119,7 +110,6 @@ ddr_set_t __ddr_setting[] = {
 							[3] = ( 23|  24 << 5  |  25 << 10  |  26 << 15  |  27 << 20  |  28 << 25 ),
 							[4] = ( 29|  11 << 5  |  12 << 10  |  13 << 15  |   0 << 20  |   0 << 25 ),
 	},
-#endif
 	.ddr_lpddr34_ca_remap	= {00,00},
 	.ddr_lpddr34_dq_remap	= {00,00},
 	.dram_rtt_nom_wr_park	= {00,00},
