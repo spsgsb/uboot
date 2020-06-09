@@ -192,7 +192,7 @@ config G12A_EVT_2X256_V1
 	bool "Support Spotify Superbird evt 2x256MB v1 board"
 	default n
 
-config G12A_EVT_1x512_V1
+config G12A_EVT_1X512_V1
 	bool "Support Spotify Superbird evt 1x512MB v1 board"
 	default n
 
