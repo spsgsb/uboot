@@ -1,6 +1,6 @@
 
 /*
- * board/amlogic/g12a_evt_v1/g12a_evt_v1.c
+ * board/amlogic/g12a_evt_1x512_v1/g12a_evt_1x512_v1.c
  *
  * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
  *

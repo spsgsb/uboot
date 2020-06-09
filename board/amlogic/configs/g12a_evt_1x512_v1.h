@@ -1,6 +1,6 @@
 
 /*
- * board/amlogic/configs/g12a_evt_v1.h
+ * board/amlogic/configs/g12a_evt_1x512_v1.h
  *
  * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
  *
@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __G12A_EVT_V1_H__
-#define __G12A_EVT_V1_H__
+#ifndef __G12A_EVT_1X512_H__
+#define __G12A_EVT_1X512_H__
 
 #include <asm/arch/cpu.h>
 

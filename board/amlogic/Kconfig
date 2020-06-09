@@ -184,8 +184,16 @@ config G12A_EP0_V1
 	bool "Support Spotify Superbird ep0 v1 board"
 	default n
 
-config G12A_EVT_V1
-	bool "Support Spotify Superbird evt v1 board"
+config G12A_EVT_2X512_V1
+	bool "Support Spotify Superbird evt 2x512MB v1 board"
+	default n
+
+config G12A_EVT_2X256_V1
+	bool "Support Spotify Superbird evt 2x256MB v1 board"
+	default n
+
+config G12A_EVT_1x512_V1
+	bool "Support Spotify Superbird evt 1x512MB v1 board"
 	default n
 
 config G12A_U200_V1
@@ -440,8 +448,16 @@ if G12A_EP0_V1
 source "board/amlogic/g12a_ep0_v1/Kconfig"
 endif
 
-if G12A_EVT_V1
-source "board/amlogic/g12a_evt_v1/Kconfig"
+if G12A_EVT_2X512_V1
+source "board/amlogic/g12a_evt_2x512_v1/Kconfig"
+endif
+
+if G12A_EVT_2X256_V1
+source "board/amlogic/g12a_evt_2x256_v1/Kconfig"
+endif
+
+if G12A_EVT_1X512_V1
+source "board/amlogic/g12a_evt_1x512_v1/Kconfig"
 endif
 
 if G12A_U200_V1
