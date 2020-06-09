@@ -1,6 +1,6 @@
 
 /*
- * board/amlogic/configs/g12a_evt_v1.h
+ * board/amlogic/configs/g12a_evt_1x512_v1.h
  *
  * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
  *
@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __G12A_EVT_V1_H__
-#define __G12A_EVT_V1_H__
+#ifndef __G12A_EVT_1X512_H__
+#define __G12A_EVT_1X512_H__
 
 #include <asm/arch/cpu.h>
 
@@ -95,7 +95,7 @@
         "display_color_fg=0xffffff\0" \
         "display_color_bg=0\0" \
         "dtb_mem_addr=0x1000000\0" \
-        "fb_addr=0x3f800000\0" \
+        "fb_addr=0x1f800000\0" \
         "fb_width=480\0" \
         "fb_height=800\0" \
         "frac_rate_policy=1\0" \
