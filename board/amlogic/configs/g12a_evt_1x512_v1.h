@@ -92,7 +92,7 @@
         "display_bpp=16\0" \
         "display_color_index=16\0" \
         "display_layer=osd0\0" \
-        "display_color_fg=0xffffff\0" \
+        "display_color_fg=0xffff\0" \
         "display_color_bg=0\0" \
         "dtb_mem_addr=0x1000000\0" \
         "fb_addr=0x1f800000\0" \
@@ -318,7 +318,12 @@
             "run storeboot;"\
         "else "\
             "osd open;osd clear;imgread pic logo bad_charger $loadaddr;bmp display $bad_charger_offset;bmp scale;vout output ${outputmode};"\
-            "while true; do sleep 1; if gpio input GPIOAO_3; then run storeboot; fi; done;"\
+            "while true; do sleep 1; "\
+            "if gpio input GPIOAO_3; then "\
+                "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
+                "run storeboot; "\
+            "fi; "\
+            "done;"\
         "fi;"\
         "\0"\
 
