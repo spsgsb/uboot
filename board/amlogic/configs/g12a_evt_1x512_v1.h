@@ -77,9 +77,16 @@
 #define CONFIG_ADC_POWER_KEY_CHAN   2  /*channel range: 0-7*/
 #define CONFIG_ADC_POWER_KEY_VAL    0  /*sample value range: 0-1023*/
 
+#undef CONFIG_SILENT_CONSOLE_UPDATE_ON_RELOC
+#define CONFIG_SILENT_CONSOLE 1
+#define CONFIG_SILENT_CONSOLE_UPDATE_ON_RELOC 1
+#define CONFIG_SILENT_CONSOLE_UPDATE_ON_SET 1
+#define CONFIG_SYS_DEVICE_NULLDEV 1
+
 /* args/envs */
 #define CONFIG_SYS_MAXARGS  64
 #define CONFIG_EXTRA_ENV_SETTINGS \
+        "silent=on\0"\
         "firstboot=1\0"\
         "upgrade_step=0\0"\
         "jtag=disable\0"\
