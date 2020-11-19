@@ -18,9 +18,15 @@
 #include <anti-rollback.h>
 #endif
 
-#define AVB_USE_TESTKEY
+#undef AVB_USE_TESTKEY
+#define AVB_USE_SPOTIFY_KEY
 #define MAX_DTB_SIZE (AML_DTB_IMG_MAX_SZ + 512)
 #define AVB_NUM_SLOT (4)
+
+#ifdef AVB_USE_SPOTIFY_KEY
+extern const unsigned char spotify_key[];
+extern const unsigned int spotify_key_length;
+#endif
 
 #ifdef AVB_USE_TESTKEY
 extern const char testkey2048[520];
@@ -155,6 +161,22 @@ static AvbIOResult validate_vbmeta_public_key(AvbOps* ops, const uint8_t* public
         size_t public_key_length, const uint8_t* public_key_metadata, size_t public_key_metadata_length,
         bool* out_is_trusted)
 {
+#ifdef AVB_USE_SPOTIFY_KEY
+    printf("Verifing using embedded key...\n");
+    if (spotify_key_length != public_key_length) {
+        printf("Key length mismatch!\n");
+        *out_is_trusted = false;
+        return AVB_IO_RESULT_OK;
+    }
+
+    if (!avb_safe_memcmp(public_key_data, spotify_key, spotify_key_length)) {
+        printf("Key is trusted!\n");
+        *out_is_trusted = true;
+    } else {
+        printf("Key is NOT trusted!\n");
+        *out_is_trusted = false;
+    }
+#else
 #ifdef AVB_USE_TESTKEY
     printf("Verified using testkey\n");
     if (testkey2048_length != public_key_length) {
@@ -171,6 +193,7 @@ static AvbIOResult validate_vbmeta_public_key(AvbOps* ops, const uint8_t* public
     flush_cache(bl31_addr, public_key_length);
     *out_is_trusted = aml_sec_boot_check(AML_D_P_AVB_PUBKEY_VERIFY,
             bl31_addr, public_key_length, 0);
+#endif
 #endif
     return AVB_IO_RESULT_OK;
 }
