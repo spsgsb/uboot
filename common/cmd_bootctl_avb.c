@@ -333,10 +333,10 @@ static int do_SetActiveSlot(
 int do_GetSystemMode (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
     char* system;
-#ifdef CONFIG_SYSTEM_AS_ROOT
-    system = CONFIG_SYSTEM_AS_ROOT;
-    strcpy(system, CONFIG_SYSTEM_AS_ROOT);
-    printf("CONFIG_SYSTEM_AS_ROOT: %s \n", CONFIG_SYSTEM_AS_ROOT);
+#ifdef CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE
+    system = CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE;
+    strcpy(system, CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE);
+    printf("CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE: %s \n", CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE);
     if (strcmp(system, "systemroot") == 0) {
         setenv("system_mode","1");
     }
@@ -352,11 +352,11 @@ int do_GetSystemMode (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 int do_GetAvbMode (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
-#ifdef CONFIG_AVB2
+#ifdef CONFIG_ENABLE_AVB_MODE
     char* avbmode;
-    avbmode = CONFIG_AVB2;
-    strcpy(avbmode, CONFIG_AVB2);
-    printf("CONFIG_AVB2: %s \n", CONFIG_AVB2);
+    avbmode = CONFIG_ENABLE_AVB_MODE;
+    strcpy(avbmode, CONFIG_ENABLE_AVB_MODE);
+    printf("CONFIG_ENABLE_AVB_MODE: %s \n", CONFIG_ENABLE_AVB_MODE);
     if (strcmp(avbmode, "avb2") == 0) {
         setenv("avb2","1");
     }

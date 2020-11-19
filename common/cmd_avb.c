@@ -394,6 +394,7 @@ static int do_avb_verify(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv
             printf("rpmb lock state: %u\n", lock_state);
 #endif
 
+        setenv("avb_cmdline", out_data->cmdline);
         avb_slot_verify_data_free(out_data);
     }
 
