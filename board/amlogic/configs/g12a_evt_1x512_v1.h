@@ -83,6 +83,9 @@
 #define CONFIG_SILENT_CONSOLE_UPDATE_ON_SET 1
 #define CONFIG_SYS_DEVICE_NULLDEV 1
 
+#define CONFIG_ENABLE_AVB_MODE "avb2"
+#define CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE "systemroot"
+
 /* args/envs */
 #define CONFIG_SYS_MAXARGS  64
 #define CONFIG_EXTRA_ENV_SETTINGS \
@@ -120,13 +123,12 @@
         "video_reverse=0\0"\
         "lock=10001000\0"\
         "active_slot=_a\0"\
-        "avb2=0\0"\
         "boot_part=boot\0"\
         "reboot_mode_android=""normal""\0"\
         "Irq_check_en=0\0"\
         "fs_type=""rootfstype=ramfs""\0"\
         "initargs="\
-            "init=/init console=ttyS0,115200 no_console_suspend earlycon=aml-uart,0xff803000 ramoops.pstore_en=1 ramoops.record_size=0x8000 ramoops.console_size=0x4000 rootfstype=ext4 rootflags=ro,noload,noauto,noatime ro"\
+            "init=/sbin/pre-init console=ttyS0,115200 no_console_suspend earlycon=aml-uart,0xff803000 ramoops.pstore_en=1 ramoops.record_size=0x8000 ramoops.console_size=0x4000 rootfstype=ext4"\
             "\0"\
         "upgrade_check="\
             "echo upgrade_step=${upgrade_step}; "\
@@ -187,6 +189,11 @@
                 "else if test ${active_slot} = _b; then "\
                     "setenv bootargs ${bootargs} root=/dev/system_b;"\
                 "fi;fi;"\
+                "setenv bootargs ${bootargs} rootflags=ro,noload,noauto,noatime ro;"\
+            "fi;"\
+            "if test ${avb2} = 1; then "\
+                "avb verify;"\
+                "setenv bootargs ${bootargs} \"${avb_cmdline}\";"\
             "fi;"\
             "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
             "run update;"\
