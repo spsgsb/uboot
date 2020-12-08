@@ -85,6 +85,7 @@
 
 #define CONFIG_ENABLE_AVB_MODE "avb2"
 #define CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE "systemroot"
+#define AVB_USE_SPOTIFY_KEY 1
 
 /* args/envs */
 #define CONFIG_SYS_MAXARGS  64

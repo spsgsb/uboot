@@ -18,4 +18,5 @@ obj-y += avb_vbmeta_image.o
 obj-y += avb_version.o
 obj-y += testkey.o
 obj-y += spotify_key.o
+obj-y += spotify_dev_key.o
 ccflags-y += -DAVB_COMPILATION -DAVB_ENABLE_DEBUG
