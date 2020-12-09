@@ -19,11 +19,15 @@
 #endif
 
 #undef AVB_USE_TESTKEY
-#define AVB_USE_SPOTIFY_KEY
 #define MAX_DTB_SIZE (AML_DTB_IMG_MAX_SZ + 512)
 #define AVB_NUM_SLOT (4)
 
-#ifdef AVB_USE_SPOTIFY_KEY
+
+#if defined(AVB_USE_SPOTIFY_KEY) && defined(AVB_USE_SPOTIFY_DEV_KEY)
+#error "Only one of AVB_USE_SPOTIFY_KEY or AVB_USE_SPOTIFY_DEV_KEY may be selected."
+#endif
+
+#if defined(AVB_USE_SPOTIFY_KEY) || defined(AVB_USE_SPOTIFY_DEV_KEY)
 extern const unsigned char spotify_key[];
 extern const unsigned int spotify_key_length;
 #endif
@@ -161,8 +165,13 @@ static AvbIOResult validate_vbmeta_public_key(AvbOps* ops, const uint8_t* public
         size_t public_key_length, const uint8_t* public_key_metadata, size_t public_key_metadata_length,
         bool* out_is_trusted)
 {
-#ifdef AVB_USE_SPOTIFY_KEY
-    printf("Verifing using embedded key...\n");
+#if defined(AVB_USE_SPOTIFY_KEY) || defined(AVB_USE_SPOTIFY_DEV_KEY)
+#if defined(AVB_USE_SPOTIFY_KEY)
+    printf("Verifying using production key...\n");
+#endif
+#if defined(AVB_USE_SPOTIFY_DEV_KEY)
+    printf("Verifying using development key...\n");
+#endif
     if (spotify_key_length != public_key_length) {
         printf("Key length mismatch!\n");
         *out_is_trusted = false;

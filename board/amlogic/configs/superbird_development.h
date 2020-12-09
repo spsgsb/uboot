@@ -1,6 +1,6 @@
 
 /*
- * board/amlogic/configs/g12a_evt_1x512_v1.h
+ * board/amlogic/configs/superbird_development.h
  *
  * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
  *
@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef __G12A_EVT_1X512_H__
-#define __G12A_EVT_1X512_H__
+#ifndef __SUPERBIRD_DEVELOPMENT_H__
+#define __SUPERBIRD_DEVELOPMENT_H__
 
 #include <asm/arch/cpu.h>
 
@@ -85,7 +85,7 @@
 
 #define CONFIG_ENABLE_AVB_MODE "avb2"
 #define CONFIG_ENABLE_SYSTEM_AS_ROOT_MODE "systemroot"
-#define AVB_USE_SPOTIFY_KEY 1
+#define AVB_USE_SPOTIFY_DEV_KEY 1
 
 /* args/envs */
 #define CONFIG_SYS_MAXARGS  64
