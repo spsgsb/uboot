@@ -184,6 +184,7 @@
         "mw.b 0x1330DEAD 0x12 1;"\
         "mw.b 0x1331DEAD 0x13 1;"\
         "mw.b 0x1332DEAD 0x15 1;"\
+        "mw.b 0x1333DEAD 0x16 1;"\
         "i2c dev 2;" \
 		"i2c read 0x35 0x3 1 0x1337DEAD;"\
         "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
@@ -192,13 +193,31 @@
             "run storeboot;"\
         "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
             "run storeboot;"\
+        "elif cmp.b 0x1337DEAD 0x1333DEAD 1; then "\
+            "run storeboot;"\
         "else "\
             "osd open;osd clear;imgread pic logo bad_charger $loadaddr;bmp display $bad_charger_offset;bmp scale;vout output ${outputmode};"\
             "while true; do sleep 1; "\
-            "if gpio input GPIOAO_3; then "\
-                "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
-                "run storeboot; "\
-            "fi; "\
+                "if gpio input GPIOAO_3; then "\
+                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
+                    "run storeboot; "\
+                "fi; "\
+                "i2c dev 2;" \
+                "i2c read 0x35 0x3 1 0x1337DEAD;"\
+                "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
+                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
+                    "run storeboot;"\
+                "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
+                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
+                    "run storeboot;"\
+                "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
+                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
+                    "run storeboot;"\
+                "elif cmp.b 0x1337DEAD 0x1333DEAD 1; then "\
+                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
+                    "run storeboot;"\
+                "fi;"\
+                "i2c mw 0x35 0x09 0x8F 1;" \
             "done;"\
         "fi;"\
         "\0"\
