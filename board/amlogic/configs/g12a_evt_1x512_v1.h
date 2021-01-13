@@ -131,45 +131,11 @@
         "initargs="\
             "init=/sbin/pre-init console=ttyS0,115200 no_console_suspend earlycon=aml-uart,0xff803000 ramoops.pstore_en=1 ramoops.record_size=0x8000 ramoops.console_size=0x4000 rootfstype=ext4"\
             "\0"\
-        "upgrade_check="\
-            "echo upgrade_step=${upgrade_step}; "\
-            "if itest ${upgrade_step} == 3; then "\
-                "run init_display; run storeargs; run update;"\
-            "else fi;"\
-            "\0"\
         "storeargs="\
             "setenv bootargs ${initargs} ${fs_type} reboot_mode_android=${reboot_mode_android} logo=${display_layer},loaded,${fb_addr} vout=${outputmode},enable panel_type=${panel_type} frac_rate_policy=${frac_rate_policy} osd_reverse=${osd_reverse} video_reverse=${video_reverse} irq_check_en=${Irq_check_en}  androidboot.selinux=${EnableSelinux} androidboot.firstboot=${firstboot} jtag=${jtag}; "\
 	"setenv bootargs ${bootargs} androidboot.hardware=amlogic;"\
             "run cmdline_keys;"\
             "\0"\
-        "switch_bootmode="\
-            "get_rebootmode;"\
-            "if test ${reboot_mode} = factory_reset; then "\
-                    "setenv reboot_mode_android ""normal"";"\
-                    "run storeargs;"\
-                    "run recovery_from_flash;"\
-            "else if test ${reboot_mode} = update; then "\
-                    "setenv reboot_mode_android ""normal"";"\
-                    "run storeargs;"\
-                    "run update;"\
-            "else if test ${reboot_mode} = quiescent; then "\
-                    "setenv reboot_mode_android ""quiescent"";"\
-                    "run storeargs;"\
-                    "setenv bootargs ${bootargs} androidboot.quiescent=1;"\
-            "else if test ${reboot_mode} = recovery_quiescent; then "\
-                    "setenv reboot_mode_android ""quiescent"";"\
-                    "run storeargs;"\
-                    "setenv bootargs ${bootargs} androidboot.quiescent=1;"\
-                    "run recovery_from_flash;"\
-            "else if test ${reboot_mode} = cold_boot; then "\
-                    "setenv reboot_mode_android ""normal"";"\
-                    "run storeargs;"\
-            "else if test ${reboot_mode} = fastboot; then "\
-                "setenv reboot_mode_android ""normal"";"\
-                "run storeargs;"\
-                "fastboot;"\
-            "fi;fi;fi;fi;fi;fi;"\
-            "\0" \
         "storeboot="\
             "boot_cooling;"\
             "get_system_as_root_mode;"\
@@ -199,124 +165,19 @@
             "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
             "run update;"\
             "\0"\
-        "factory_reset_poweroff_protect="\
-            "echo wipe_data=${wipe_data}; echo wipe_cache=${wipe_cache};"\
-            "if test ${wipe_data} = failed; then "\
-                "run init_display; run storeargs;"\
-                "if mmcinfo; then "\
-                    "run recovery_from_sdcard;"\
-                "fi;"\
-                "if usb start 0; then "\
-                    "run recovery_from_udisk;"\
-                "fi;"\
-                "run recovery_from_flash;"\
-            "fi; "\
-            "if test ${wipe_cache} = failed; then "\
-                "run init_display; run storeargs;"\
-                "if mmcinfo; then "\
-                    "run recovery_from_sdcard;"\
-                "fi;"\
-                "if usb start 0; then "\
-                    "run recovery_from_udisk;"\
-                "fi;"\
-                "run recovery_from_flash;"\
-            "fi; \0" \
-         "update="\
+        "update="\
             /*first usb burning, second sdc_burn, third ext-sd autoscr/recovery, last udisk autoscr/recovery*/\
             "run usb_burning; "\
-            "run sdc_burning; "\
-            "if mmcinfo; then "\
-                "run recovery_from_sdcard;"\
-            "fi;"\
-            "if usb start 0; then "\
-                "run recovery_from_udisk;"\
-            "fi;"\
-            "run recovery_from_flash;"\
-            "\0"\
-        "recovery_from_sdcard="\
-            "if fatload mmc 0 ${loadaddr} aml_autoscript; then autoscr ${loadaddr}; fi;"\
-            "if fatload mmc 0 ${loadaddr} recovery.img; then "\
-                    "if fatload mmc 0 ${dtb_mem_addr} dtb.img; then echo sd dtb.img loaded; fi;"\
-                    "wipeisb; "\
-                    "bootm ${loadaddr};fi;"\
-            "\0"\
-        "recovery_from_udisk="\
-            "if fatload usb 0 ${loadaddr} aml_autoscript; then autoscr ${loadaddr}; fi;"\
-            "if fatload usb 0 ${loadaddr} recovery.img; then "\
-                "if fatload usb 0 ${dtb_mem_addr} dtb.img; then echo udisk dtb.img loaded; fi;"\
-                "wipeisb; "\
-                "bootm ${loadaddr};fi;"\
-            "\0"\
-        "recovery_from_flash="\
-            "get_valid_slot;"\
-            "echo active_slot: ${active_slot};"\
-            "if test ${active_slot} = normal; then "\
-                "setenv bootargs ${bootargs} aml_dt=${aml_dt} recovery_part={recovery_part} recovery_offset={recovery_offset};"\
-                "if imgread kernel ${recovery_part} ${loadaddr} ${recovery_offset}; then wipeisb; bootm ${loadaddr}; fi;"\
-            "else "\
-                "setenv bootargs ${bootargs} aml_dt=${aml_dt} recovery_part=${boot_part} recovery_offset=${recovery_offset};"\
-                "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
-            "fi;"\
             "\0"\
         "init_display="\
-            "get_rebootmode;"\
-            "echo reboot_mode:::: ${reboot_mode};"\
-            "if test ${reboot_mode} = quiescent; then "\
-                    "setenv reboot_mode_android ""quiescent"";"\
-                    "run storeargs;"\
-                    "setenv bootargs ${bootargs} androidboot.quiescent=1;"\
-                    "osd open;osd clear;"\
-            "else if test ${reboot_mode} = recovery_quiescent; then "\
-                    "setenv reboot_mode_android ""quiescent"";"\
-                    "run storeargs;"\
-                    "setenv bootargs ${bootargs} androidboot.quiescent=1;"\
-                    "osd open;osd clear;"\
-            "else "\
-                "setenv reboot_mode_android ""normal"";"\
-                "run storeargs;"\
-                "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode};"\
-            "fi;fi;"\
-            "\0"\
-        "cmdline_keys="\
-            "if keyman init 0x1234; then "\
-                "if keyman read usid ${loadaddr} str; then "\
-                    "setenv bootargs ${bootargs} androidboot.serialno=${usid};"\
-                    "setenv serial ${usid};"\
-                "else "\
-                    "setenv bootargs ${bootargs} androidboot.serialno=1234567890;"\
-                    "setenv serial 1234567890;"\
-                "fi;"\
-                "if keyman read mac ${loadaddr} str; then "\
-                    "setenv bootargs ${bootargs} mac=${mac} androidboot.mac=${mac};"\
-                "fi;"\
-                "if keyman read deviceid ${loadaddr} str; then "\
-                    "setenv bootargs ${bootargs} androidboot.deviceid=${deviceid};"\
-                "fi;"\
-                "if keyman read region_code ${loadaddr} str; then "\
-                    "setenv bootargs ${bootargs} androidboot.wificountrycode=${region_code};"\
-                "else "\
-                    "setenv bootargs ${bootargs} androidboot.wificountrycode=US;"\
-                "fi;"\
-            "fi;"\
+            "setenv reboot_mode_android ""normal"";"\
+            "run storeargs;"\
+            "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode};"\
             "\0"\
         "bcb_cmd="\
             "get_avb_mode;"\
             "get_valid_slot;"\
             "\0"\
-        "upgrade_key="\
-            "if gpio input GPIOAO_3; then "\
-                "echo detect upgrade key; run update;"\
-            "fi;"\
-            "\0"\
-	"irremote_update="\
-		"if irkey 2500000 0xe31cfb04 0xb748fb04; then "\
-			"echo read irkey ok!; " \
-		"if itest ${irkey_value} == 0xe31cfb04; then " \
-			"run update;" \
-		"else if itest ${irkey_value} == 0xb748fb04; then " \
-			"run update;\n" \
-			"fi;fi;" \
-		"fi;\0" \
 	"check_charger="\
 		"mw 0xFF6346DC 0x33000000;"\
         "mw.b 0x1337DEAD 0x00 1;"\
@@ -344,14 +205,10 @@
 
 #define CONFIG_PREBOOT  \
             "run bcb_cmd; "\
-            "run factory_reset_poweroff_protect;"\
-            "run upgrade_check;"\
             "run init_display;"\
             "run storeargs;"\
-            "run upgrade_key;" \
-            "forceupdate;" \
-            "bcb uboot-command;"\
-            "run switch_bootmode;"
+            "bcb uboot-command;"
+            
 
 #define CONFIG_BOOTCOMMAND "run check_charger"
 
