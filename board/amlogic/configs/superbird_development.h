@@ -136,6 +136,7 @@
 	"setenv bootargs ${bootargs} androidboot.hardware=amlogic;"\
             "\0"\
         "storeboot="\
+            "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
             "boot_cooling;"\
             "get_system_as_root_mode;"\
             "echo system_mode: ${system_mode};"\
@@ -198,22 +199,16 @@
             "osd open;osd clear;imgread pic logo bad_charger $loadaddr;bmp display $bad_charger_offset;bmp scale;vout output ${outputmode};"\
             "while true; do sleep 1; "\
                 "if gpio input GPIOAO_3; then "\
-                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
                     "run storeboot; "\
                 "fi; "\
-                "i2c dev 2;" \
                 "i2c read 0x35 0x3 1 0x1337DEAD;"\
                 "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
-                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
                     "run storeboot;"\
                 "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
-                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
                     "run storeboot;"\
                 "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
-                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
                     "run storeboot;"\
                 "elif cmp.b 0x1337DEAD 0x1333DEAD 1; then "\
-                    "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
                     "run storeboot;"\
                 "fi;"\
                 "i2c mw 0x35 0x09 0x8F 1;" \
