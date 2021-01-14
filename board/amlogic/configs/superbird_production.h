@@ -169,7 +169,7 @@
             /*first usb burning, second sdc_burn, third ext-sd autoscr/recovery, last udisk autoscr/recovery*/\
             "run usb_burning; "\
             "\0"\
-        "init_display="\            
+        "init_display="\
             "setenv reboot_mode_android ""normal"";"\
             "run storeargs;"\
             "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode};"\
