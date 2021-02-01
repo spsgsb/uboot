@@ -153,11 +153,6 @@ void dump_boot_info(AvbABData* info)
     printf("info->crc32 = %d\n", info->crc32);
 }
 
-static bool slot_is_bootable(AvbABSlotData* slot) {
-  return slot->priority > 0 &&
-         (slot->successful_boot || (slot->tries_remaining > 0));
-}
-
 int get_active_slot(AvbABData* info) {
     if (info->slots[0].priority > info->slots[1].priority)
         return 0;
@@ -165,6 +160,19 @@ int get_active_slot(AvbABData* info) {
         return 1;
 }
 
+static bool slot_is_bootable(AvbABSlotData* slot) {
+  return slot->priority > 0 &&
+         (slot->successful_boot || (slot->tries_remaining > 0));
+}
+
+static void consume_boot_try(AvbABSlotData* slot) {
+    --(slot->tries_remaining);
+    slot->successful_boot = 0;
+}
+
+static bool should_failover(AvbABSlotData* slot) {
+    return slot->tries_remaining <= 0;
+}
 
 int boot_info_set_active_slot(AvbABData* info, int slot)
 {
@@ -182,6 +190,18 @@ int boot_info_set_active_slot(AvbABData* info, int slot)
     }
 
     dump_boot_info(info);
+
+    return 0;
+}
+
+int boot_info_failover(AvbABData* info) {
+    int new_slot;
+
+    new_slot = 1 - get_active_slot(info);
+
+    printf("Failing over to slot %d...\n", new_slot);
+
+    boot_info_set_active_slot(info, new_slot);
 
     return 0;
 }
@@ -248,6 +268,16 @@ static int do_GetValidSlot(
 
     slot = get_active_slot(&info);
     printf("active slot = %d\n", slot);
+
+    if (should_failover(&(info.slots[slot]))) {
+        printf("No tries remaining on slot %d!\n", slot);
+
+        boot_info_failover(&info);
+        boot_info_save(&info, miscbuf);
+
+        slot = get_active_slot(&info);
+        printf("active slot = %d\n", slot);
+    }
 
     bootable_a = slot_is_bootable(&(info.slots[0]));
     bootable_b = slot_is_bootable(&(info.slots[1]));
@@ -370,6 +400,34 @@ int do_GetAvbMode (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
     return 0;
 }
 
+int do_ConsumeBootTry (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
+    char miscbuf[MISCBUF_SIZE] = {0};
+    AvbABData info;
+    int slot;
+
+    if (has_boot_slot == 0) {
+        printf("device is not ab mode\n");
+        return -1;
+    }
+
+    boot_info_open_partition(miscbuf);
+    boot_info_load(&info, miscbuf);
+
+    if (!boot_info_validate(&info)) {
+        printf("boot-info is invalid. Resetting.\n");
+        boot_info_reset(&info);
+        boot_info_save(&info, miscbuf);
+    }
+
+    slot = get_active_slot(&info);
+
+    consume_boot_try(&(info.slots[slot]));
+
+    boot_info_save(&info, miscbuf);
+
+    return 0;
+
+}
 
 #endif /* CONFIG_BOOTLOADER_CONTROL_BLOCK */
 
@@ -402,3 +460,9 @@ U_BOOT_CMD(
     "So you can execute command: get_avb_mode"
 );
 
+U_BOOT_CMD(
+    consume_boot_try, 1,	0, do_ConsumeBootTry,
+    "consume_boot_try",
+    "\nThis command consumes 1 boot try\n"
+    "So you can execute command: consume_boot_try"
+);

@@ -162,6 +162,7 @@
                 "avb verify;"\
                 "setenv bootargs ${bootargs} \"${avb_cmdline}\";"\
             "fi;"\
+            "consume_boot_try;"\
             "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
             "run update;"\
             "\0"\
