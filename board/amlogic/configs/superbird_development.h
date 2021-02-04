@@ -251,6 +251,8 @@
 #define CONFIG_DDR_PLL_BYPASS			0 //0:disable, 1:enable. ddr pll bypass function
 #define CONFIG_DDR_NONSEC_SCRAMBLE		0 //0:disable, 1:enable. non-sec region scramble function
 
+#define CONFIG_SKIP_NAND_INIT 1
+
 /* storage: emmc/nand/sd */
 #define		CONFIG_STORE_COMPATIBLE 1
 #define 	CONFIG_ENV_OVERWRITE

@@ -359,6 +359,7 @@ static int initr_spi(void)
 }
 #endif
 
+#ifndef CONFIG_SKIP_NAND_INIT
 #ifdef CONFIG_CMD_NAND
 /* go init the NAND */
 static int initr_nand(void)
@@ -367,6 +368,7 @@ static int initr_nand(void)
 	nand_init();
 	return 0;
 }
+#endif
 #endif
 
 #if defined(CONFIG_CMD_ONENAND)
@@ -767,8 +769,10 @@ init_fnc_t init_sequence_r[] = {
 #if defined(CONFIG_X86) && defined(CONFIG_SPI)
 	init_func_spi,
 #endif
+#ifndef CONFIG_SKIP_NAND_INIT
 #ifdef CONFIG_CMD_NAND
 	initr_nand,
+#endif
 #endif
 #ifdef CONFIG_CMD_ONENAND
 	initr_onenand,
