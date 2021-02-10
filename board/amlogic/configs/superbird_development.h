@@ -158,11 +158,6 @@
                 "fi;fi;"\
                 "setenv bootargs ${bootargs} rootflags=ro,noload,noauto,noatime ro;"\
             "fi;"\
-            "if test ${avb2} = 1; then "\
-                "avb verify;"\
-                "setenv bootargs ${bootargs} \"${avb_cmdline}\";"\
-            "fi;"\
-            "consume_boot_try;"\
             "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
             "run update;"\
             "\0"\
