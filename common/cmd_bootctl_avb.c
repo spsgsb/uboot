@@ -201,6 +201,11 @@ int boot_info_failover(AvbABData* info) {
 
     printf("Failing over to slot %d...\n", new_slot);
 
+    setenv("active_slot", new_slot ? "_b" : "_a");
+    setenv("slot-suffixes", new_slot ? "1" : "0");
+    setenv("boot_part", new_slot ? "boot_b" : "boot_a");
+    printf("set active slot %s \n", new_slot ? "b" : "a");
+
     boot_info_set_active_slot(info, new_slot);
 
     return 0;
