@@ -308,8 +308,8 @@
 #define MMC_HIGH_DDR_MAX_DTR	52000000
 #define MMC_HS200_MAX_DTR	200000000
 
-//#define MMC_CMD23
-//#define MMC_HS200_MODE
+#define MMC_HS200_MODE
+#define MMC_CMD23
 //#define MMC_HS400_MODE
 
 struct mmc_cid {
