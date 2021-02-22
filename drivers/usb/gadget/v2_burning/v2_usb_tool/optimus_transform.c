@@ -529,7 +529,7 @@ int optimus_working (const char *cmd, char* buff)
         }
 
         printf("[info]%s\n",buff);
-        mdelay(60);
+        mdelay(20);
         return ret;
 }
 
