@@ -1895,6 +1895,7 @@ int mmc_init(struct mmc *mmc)
 #endif
 #ifdef MMC_HS200_MODE
 	mmc_set_hs200_mode(mmc);
+	aml_emmc_refix(mmc);
 #ifdef MMC_HS400_MODE
 	mmc_set_hs400_mode(mmc);
 #endif
