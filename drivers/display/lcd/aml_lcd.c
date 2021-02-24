@@ -265,7 +265,7 @@ static void lcd_module_enable(char *mode)
 
 	aml_bl_pwm_config_update(lcd_drv->bl_config);
 	aml_bl_set_level(lcd_drv->bl_config->level_default);
-	aml_bl_power_ctrl(1, 1);
+	aml_bl_power_ctrl(1, 0);
 	aml_lcd_mute_setting(0);
 
 	lcd_drv->lcd_status = 1;
@@ -278,7 +278,7 @@ static void lcd_module_disable(void)
 	LCDPR("disable: %s\n", lcd_drv->lcd_config->lcd_basic.model_name);
 
 	aml_lcd_mute_setting(1);
-	aml_bl_power_ctrl(0, 1);
+	aml_bl_power_ctrl(0, 0);
 
 	lcd_power_ctrl(0);
 
@@ -852,12 +852,12 @@ static int aml_get_backlight_level(void)
 
 static void aml_backlight_power_on(void)
 {
-	aml_bl_power_ctrl(1, 1);
+	aml_bl_power_ctrl(1, 0);
 }
 
 static void aml_backlight_power_off(void)
 {
-	aml_bl_power_ctrl(0, 1);
+	aml_bl_power_ctrl(0, 0);
 }
 
 static void aml_lcd_key_test(void)
