@@ -213,6 +213,7 @@
         "\0"\
 
 #define CONFIG_PREBOOT  \
+            "consume_boot_try;"\
             "run bcb_cmd; "\
             "run init_display;"\
             "run storeargs;"\

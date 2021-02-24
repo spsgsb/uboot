@@ -1115,8 +1115,6 @@ static const void *boot_get_kernel(cmd_tbl_t *cmdtp, int flag, int argc,
 	debug("   kernel data at 0x%08lx, len = 0x%08lx (%ld)\n",
 	      *os_data, *os_len, *os_len);
 
-	run_command("consume_boot_try", 0);
-
 	return buf;
 }
 #else /* USE_HOSTCC */
