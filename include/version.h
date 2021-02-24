@@ -19,9 +19,12 @@
 #endif
 
 #define U_BOOT_VERSION_STRING U_BOOT_VERSION " (" U_BOOT_DATE " - " \
-	U_BOOT_TIME ")" CONFIG_IDENT_STRING
+	U_BOOT_TIME  " - " U_BOOT_GIT_VERSION ")" CONFIG_IDENT_STRING
+
+#define U_BOOT_GIT_VERSION_STRING U_BOOT_GIT_VERSION
 
 #ifndef __ASSEMBLY__
 extern const char version_string[];
+extern const char git_version_string[];
 #endif	/* __ASSEMBLY__ */
 #endif	/* __VERSION_H__ */

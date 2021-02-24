@@ -74,6 +74,7 @@ void main_loop(void)
 	modem_init();
 #ifdef CONFIG_VERSION_VARIABLE
 	setenv("ver", version_string);  /* set version variable */
+	setenv("gitver", git_version_string);  /* set git version variable */
 #endif /* CONFIG_VERSION_VARIABLE */
 
 	cli_init();

@@ -214,6 +214,7 @@ obj		:= $(objtree)
 
 buildsrc	:= $(abspath $(srctree))
 buildtree	:= $(abspath $(CURDIR)/$(KBUILD_OUTPUT))
+reporoot	:= $(shell git rev-parse --show-toplevel)/source/amlogic/bootloader/uboot-repo/bl33/
 
 VPATH		:= $(srctree)$(if $(KBUILD_EXTMOD),:$(KBUILD_EXTMOD))
 
@@ -367,6 +368,7 @@ KBUILD_AFLAGS   := -D__ASSEMBLY__
 # Read UBOOTRELEASE from include/config/uboot.release (if it exists)
 UBOOTRELEASE = $(shell cat include/config/uboot.release 2> /dev/null)
 UBOOTVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
+UBOOTGITVERSION = $(shell git -C $(reporoot) describe --tags --dirty)
 
 export VERSION PATCHLEVEL SUBLEVEL UBOOTRELEASE UBOOTVERSION
 export ARCH CPU BOARD VENDOR SOC CPUDIR BOARDDIR
@@ -1198,6 +1200,7 @@ prepare: prepare0
 define filechk_version.h
 	(echo \#define PLAIN_VERSION \"$(UBOOTRELEASE)\"; \
 	echo \#define U_BOOT_VERSION \"U-Boot \" PLAIN_VERSION; \
+	echo \#define U_BOOT_GIT_VERSION \"$(UBOOTGITVERSION)\"; \
 	echo \#define CONFIG_SYSTEM_AS_ROOT \"${SYSTEMMODE}\"; \
 	echo \#define CONFIG_AVB2 \"${AVBMODE}\"; \
 	echo \#define CC_VERSION_STRING \"$$($(CC) --version | head -n 1)\"; \
