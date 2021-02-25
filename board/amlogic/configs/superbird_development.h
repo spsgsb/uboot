@@ -105,6 +105,7 @@
         "display_layer=osd0\0" \
         "display_color_fg=0xffff\0" \
         "display_color_bg=0\0" \
+        "display_init=1\0"\
         "dtb_mem_addr=0x1000000\0" \
         "fb_addr=0x1f800000\0" \
         "fb_width=480\0" \
@@ -127,7 +128,9 @@
         "boot_part=boot\0"\
         "reboot_mode_android=""normal""\0"\
         "Irq_check_en=0\0"\
-        "fs_type=""rootfstype=ramfs""\0"\
+        "fs_type=""ro rootwait skip_initramfs""\0"\
+        "system_mode=1\0"\
+        "avb2=1\0"\
         "initargs="\
             "init=/sbin/pre-init console=ttyS0,115200 no_console_suspend earlycon=aml-uart,0xff803000 ramoops.pstore_en=1 ramoops.record_size=0x8000 ramoops.console_size=0x4000 rootfstype=ext4"\
             "\0"\
@@ -136,84 +139,80 @@
 	"setenv bootargs ${bootargs} androidboot.hardware=amlogic;"\
             "\0"\
         "storeboot="\
-            "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode}; "\
             "boot_cooling;"\
-            "get_system_as_root_mode;"\
-            "echo system_mode: ${system_mode};"\
-            "if test ${system_mode} = 1; then "\
-                    "setenv fs_type ""ro rootwait skip_initramfs"";"\
-                    "run storeargs;"\
-            "fi;"\
+            "run storeargs;"\
             "get_valid_slot;"\
-            "get_avb_mode;"\
-            "echo active_slot: ${active_slot};"\
-            "if test ${active_slot} != normal; then "\
-                    "setenv bootargs ${bootargs} androidboot.slot_suffix=${active_slot};"\
-            "fi;"\
-            "if test ${avb2} = 0; then "\
-                "if test ${active_slot} = _a; then "\
-                    "setenv bootargs ${bootargs} root=/dev/system_a;"\
-                "else if test ${active_slot} = _b; then "\
-                    "setenv bootargs ${bootargs} root=/dev/system_b;"\
-                "fi;fi;"\
-                "setenv bootargs ${bootargs} rootflags=ro,noload,noauto,noatime ro;"\
-            "fi;"\
+            "setenv bootargs ${bootargs} androidboot.slot_suffix=${active_slot};" \
             "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
             "run update;"\
+            "\0"\
+        "splash_boot="\
+            "imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;"\
+            "run storeboot;"\
             "\0"\
         "update="\
             /*first usb burning, second sdc_burn, third ext-sd autoscr/recovery, last udisk autoscr/recovery*/\
             "run usb_burning; "\
             "\0"\
         "init_display="\
-            "setenv reboot_mode_android ""normal"";"\
-            "run storeargs;"\
-            "osd open;osd clear;imgread pic logo bootup_spotify $loadaddr;bmp display $bootup_spotify_offset;bmp scale;vout output ${outputmode};"\
+            "if test ${display_init} = 1; then "\
+                "osd open;"\
+		"osd clear;"\
+		"imgread pic logo bootup_spotify $loadaddr;"\
+		"bmp display $bootup_spotify_offset;"\
+		"bmp scale;"\
+		"vout output ${outputmode};"\
+            "fi;"\
             "\0"\
         "bcb_cmd="\
             "get_avb_mode;"\
             "get_valid_slot;"\
             "\0"\
 	"check_charger="\
-		"mw 0xFF6346DC 0x33000000;"\
-        "mw.b 0x1337DEAD 0x00 1;"\
-        "mw.b 0x1330DEAD 0x12 1;"\
-        "mw.b 0x1331DEAD 0x13 1;"\
-        "mw.b 0x1332DEAD 0x15 1;"\
-        "mw.b 0x1333DEAD 0x16 1;"\
-        "i2c dev 2;" \
-		"i2c read 0x35 0x3 1 0x1337DEAD;"\
-        "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
-            "run storeboot;"\
-        "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
-            "run storeboot;"\
-        "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
-            "run storeboot;"\
-        "elif cmp.b 0x1337DEAD 0x1333DEAD 1; then "\
-            "run storeboot;"\
-        "else "\
-            "osd open;osd clear;imgread pic logo bad_charger $loadaddr;bmp display $bad_charger_offset;bmp scale;vout output ${outputmode};"\
-            "while true; do sleep 1; "\
-                "if gpio input GPIOAO_3; then "\
-                    "run storeboot; "\
-                "fi; "\
-                "i2c read 0x35 0x3 1 0x1337DEAD;"\
-                "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
-                    "run storeboot;"\
-                "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
-                    "run storeboot;"\
-                "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
-                    "run storeboot;"\
-                "elif cmp.b 0x1337DEAD 0x1333DEAD 1; then "\
-                    "run storeboot;"\
-                "fi;"\
-                "i2c mw 0x35 0x09 0x8F 1;" \
-            "done;"\
-        "fi;"\
-        "\0"\
+	    "mw 0xFF6346DC 0x33000000;"             \
+	    "mw.b 0x1337DEAD 0x00 1;"\
+	    "mw.b 0x1330DEAD 0x12 1;"\
+	    "mw.b 0x1331DEAD 0x13 1;"\
+	    "mw.b 0x1332DEAD 0x15 1;"\
+	    "mw.b 0x1333DEAD 0x16 1;"\
+	    "i2c dev 2;" \
+	    "i2c read 0x35 0x3 1 0x1337DEAD;"\
+	    "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
+	        "run storeboot;"\
+	    "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
+		"run storeboot;"\
+	    "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
+		"run storeboot;"\
+	    "elif cmp.b 0x1337DEAD 0x1333DEAD 1; then "\
+		"run storeboot;"\
+	    "else "\
+		"osd open;"\
+		"osd clear;"\
+		"imgread pic logo bad_charger $loadaddr;"\
+		"bmp display $bad_charger_offset;"\
+		"bmp scale;"\
+		"vout output ${outputmode};"\
+		"while true; do sleep 1; "\
+		    "if gpio input GPIOAO_3; then "\
+			"run splash_boot; "\
+		    "fi; "\
+		    "i2c read 0x35 0x3 1 0x1337DEAD;"\
+		    "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
+			"run splash_boot;"\
+		    "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
+			"run splash_boot;"\
+		    "elif cmp.b 0x1337DEAD 0x1332DEAD 1; then "\
+			"run splash_boot;"\
+		    "elif cmp.b 0x1337DEAD 0x1333DEAD 1; then "\
+			"run splash_boot;"\
+		    "fi;"\
+		    "i2c mw 0x35 0x09 0x8F 1;" \
+		"done;"\
+	    "fi;"\
+            "\0"\
 
 #define CONFIG_PREBOOT  \
-            "run bcb_cmd; "\
+            "run bcb_cmd;"\
             "run init_display;"\
             "run storeargs;"\
             "bcb uboot-command;"
