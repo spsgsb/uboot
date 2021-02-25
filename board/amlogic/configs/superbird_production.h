@@ -1,6 +1,6 @@
 
 /*
- * board/amlogic/configs/superbird_development.h
+ * board/amlogic/configs/superbird_production.h
  *
  * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
  *
@@ -212,7 +212,7 @@
             "\0"\
 
 #define CONFIG_PREBOOT  \
-	    "run bcb_cmd;"\
+            "run bcb_cmd;"\
             "run init_display;"\
             "run storeargs;"\
             "bcb uboot-command;"
