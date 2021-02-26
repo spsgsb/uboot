@@ -786,7 +786,7 @@ void aml_bl_power_ctrl(int status, int delay_flag)
 	if (lcd_debug_print_flag)
 		LCDPR("bl: status=%d gpio=%d value=%d\n", status, gpio, value);
 
-	if (status) {
+	if (!status) {
 		/* bl_off_policy */
 		if (bl_off_policy != BL_OFF_POLICY_NONE) {
 			LCDPR("bl_off_policy=%d for bl_off\n", bl_off_policy);
