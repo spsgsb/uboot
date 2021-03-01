@@ -212,7 +212,8 @@
             "\0"\
 
 #define CONFIG_PREBOOT  \
-            "run bcb_cmd;"\
+            "consume_boot_try;"\
+            "run bcb_cmd; "\
             "run init_display;"\
             "run storeargs;"\
             "bcb uboot-command;"
