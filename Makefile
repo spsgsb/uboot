@@ -214,7 +214,6 @@ obj		:= $(objtree)
 
 buildsrc	:= $(abspath $(srctree))
 buildtree	:= $(abspath $(CURDIR)/$(KBUILD_OUTPUT))
-reporoot	:= $(shell git rev-parse --show-toplevel)/source/amlogic/bootloader/uboot-repo/bl33/
 
 VPATH		:= $(srctree)$(if $(KBUILD_EXTMOD),:$(KBUILD_EXTMOD))
 
@@ -368,7 +367,8 @@ KBUILD_AFLAGS   := -D__ASSEMBLY__
 # Read UBOOTRELEASE from include/config/uboot.release (if it exists)
 UBOOTRELEASE = $(shell cat include/config/uboot.release 2> /dev/null)
 UBOOTVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
-UBOOTGITVERSION = $(shell git -C $(reporoot) describe --tags --dirty)
+UBOOTGITVERSIONFILECONTENT = $(shell cat $(srctree)/git_version 2> /dev/null)
+UBOOTGITVERSION = $(if $(UBOOTGITVERSIONFILECONTENT),$(UBOOTGITVERSIONFILECONTENT),unknown)
 
 export VERSION PATCHLEVEL SUBLEVEL UBOOTRELEASE UBOOTVERSION
 export ARCH CPU BOARD VENDOR SOC CPUDIR BOARDDIR
