@@ -108,6 +108,7 @@
         "display_color_fg=0xffff\0" \
         "display_color_bg=0\0" \
         "display_init=1\0"\
+        "skip_charger_check=0\0"\
         "dtb_mem_addr=0x1000000\0" \
         "fb_addr=0x1f800000\0" \
         "fb_width=480\0" \
@@ -199,7 +200,9 @@
 			"run splash_boot; "\
 		    "fi; "\
 		    "i2c read 0x35 0x3 1 0x1337DEAD;"\
-		    "if cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
+		    "if test ${skip_charger_check} = 1; then "   \
+			"run storeboot;"\
+		    "elif cmp.b 0x1337DEAD 0x1330DEAD 1; then "\
 			"run splash_boot;"\
 		    "elif cmp.b 0x1337DEAD 0x1331DEAD 1; then "\
 			"run splash_boot;"\
