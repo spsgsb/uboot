@@ -1,9 +1,8 @@
-
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * plat/gxb/sha2.c
- *
- * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
-*/
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
+
 #include <common.h>
 #include <linux/string.h>
 #include <u-boot/sha256.h>

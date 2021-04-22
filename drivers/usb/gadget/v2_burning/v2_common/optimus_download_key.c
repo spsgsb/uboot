@@ -1,20 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * =====================================================================================
- *
- *       Filename:  v2_download_key.c
- *
- *        Version:  1.0
- *        Created:  2013/9/4 14:10:07
- *       Compiler:  gcc
- *
- *         Author:  Sam Wu (yihui.wu@amlogic.com)
- *   Organization:  Amlogic Inc.
- *
- *       Revision:  none
- *    Description:  Funcitions and command to burn keys with key_unify driver
- *
- * =====================================================================================
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include "../v2_burning_i.h"
 #include <amlogic/keyunify.h>
 

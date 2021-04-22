@@ -1,9 +1,6 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- *amlogic USB HOST XHCI Controller
- *
- *	Yue Wang <yue.wang@amlogic.com>
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 /*

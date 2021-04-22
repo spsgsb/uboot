@@ -1,13 +1,7 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Rev history:
- * 2017.04.06 structure done
- * 2017.04.20 function in pll.c done
- * 2017.04.26 uboot cmd done
- * 2017.07.25 update for txl
- *
- * Author: xiaobo.gu@amlogic.com
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
-
 
 /* README */
 /*

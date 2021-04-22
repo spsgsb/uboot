@@ -1,10 +1,7 @@
-/******************************************************************************
-*    Copyright (c) 2009-2015 by Hisi.
-*    All rights reserved.
-*
-*    Create by Chenzetian. 2015-11-16
-*
-******************************************************************************/
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
 #include <common.h>
 #include <command.h>

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
 int pwm_voltage_table[][2] = {
 	{ 0x1c0000,  860},

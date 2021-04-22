@@ -1,4 +1,8 @@
-/*Amlogic secure apb registers*/
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
+
 #ifndef __SECURE_APB_H_
 #define __SECURE_APB_H_
 

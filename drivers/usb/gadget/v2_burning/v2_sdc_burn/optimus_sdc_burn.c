@@ -1,14 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * \file        optimus_sdc_burn.c
- * \brief       burning itself from Pheripheral tf/sdmmc card
- *
- * \version     1.0.0
- * \date        2013-7-11
- * \author      Sam.Wu <yihui.wu@amlgic.com>
- *
- * Copyright (c) 2013 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include "optimus_sdc_burn_i.h"
 #include "optimus_led.h"
 #include <asm/arch/secure_apb.h>

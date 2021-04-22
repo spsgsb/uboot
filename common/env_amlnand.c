@@ -1,17 +1,6 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * (C) Copyright 2000-2010
- * Wolfgang Denk, DENX Software Engineering, wd@denx.de.
- *
- * (C) Copyright 2008
- * Stuart Wood, Lab X Technologies <stuart.wood@labxtechnologies.com>
- *
- * (C) Copyright 2004
- * Jian Zhang, Texas Instruments, jzhang@ti.com.
- *
- * (C) Copyright 2001 Sysgo Real-Time Solutions, GmbH <www.elinos.com>
- * Andreas Heppel <aheppel@sysgo.de>
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #include <common.h>

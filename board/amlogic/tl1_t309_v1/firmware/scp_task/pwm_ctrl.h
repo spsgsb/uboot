@@ -1,6 +1,8 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
-*table for Dynamic Voltage/Frequency Scaling
-*/
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
+
 #ifndef __PWM_CTRL_H__
 #define __PWM_CTRL_H__
 

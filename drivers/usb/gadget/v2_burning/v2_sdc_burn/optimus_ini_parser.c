@@ -1,14 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * \file        optimus_ini_parser.c
- * \brief       ini parsing utilities for sdc burnning
- *
- * \version     1.0.0
- * \date        2013-7-11
- * \author      Sam.Wu <yihui.wu@amlgic.com>
- *
- * Copyright (c) 2013 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include "optimus_sdc_burn_i.h"
 
 #define dbg(fmt ...)  //printf("[INI]"fmt)

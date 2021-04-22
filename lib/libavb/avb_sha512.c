@@ -1,5 +1,6 @@
-/* SHA-256 and SHA-512 implementation based on code by Oliver Gay
- * <olivier.gay@a3.epfl.ch> under a BSD-style license. See below.
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 /*

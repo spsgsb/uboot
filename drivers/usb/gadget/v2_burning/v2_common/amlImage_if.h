@@ -1,13 +1,8 @@
-/* * \file        amlImage_if.h
- * \brief       Amlogic firmware image interface
- *
- * \version     1.0.0
- * \date        2013/5/21
- * \author      Sam.Wu <yihui.wu@Amlogic.com>
- *
- * Copyright (c) 2013 Amlogic Inc. All Rights Reserved.
- *
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #ifndef __AMLIMAGE_IF_H__
 #define __AMLIMAGE_IF_H__
 

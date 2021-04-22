@@ -1,10 +1,8 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * Header file for AES hardware acceleration
- *
- * Copyright (C) 2017 Amlogic, Inc. All rights reserved.
- *
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #ifndef __HW_AES_H
 #define __HW_AES_H
 

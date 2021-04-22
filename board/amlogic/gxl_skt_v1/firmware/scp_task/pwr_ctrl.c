@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
+
 #define __SUSPEND_FIRMWARE__
 #include <config.h>
 #undef __SUSPEND_FIRMWARE__
