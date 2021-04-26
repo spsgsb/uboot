@@ -1,13 +1,6 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * \file        optimus_key_burn.c
- * \brief       burning keys from sdcard like update.exe
- *
- * \version     1.0.0
- * \date        2014/12/25
- * \author      Sam.Wu <yihui.wu@amlgic.com>
- *
- * Copyright (c) 2014 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 /*

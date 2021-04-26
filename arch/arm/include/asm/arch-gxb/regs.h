@@ -1,14 +1,7 @@
-
-
-
-
-/* readme */
-
-/* asm/arch/regs.h
- * registers collect from fragmented places in each drivers/files,
- * since regs changes a lot after txlx chip, all registers need
- * managed orderly.
-*/
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
 /* bus base */
 #define REG_BASE_AOBUS                  (0xc8100000L)

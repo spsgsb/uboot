@@ -1,14 +1,8 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * \file        optimus_progress_ui.h
- * \brief       interfaces of optimus_progress_ui.c
- *
- * \version     1.0.0
- * \date        2013/10/13
- * \author      Sam.Wu <yihui.wu@amlgic.com>
- *
- * Copyright (c) 2013 Amlogic Inc.. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #ifndef __OPTIMUS_PROGRESS_UI__
 #define __OPTIMUS_PROGRESS_UI__
 

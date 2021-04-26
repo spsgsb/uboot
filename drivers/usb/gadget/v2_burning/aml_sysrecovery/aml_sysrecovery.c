@@ -1,14 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * \file        sysrecovery.c
- * \brief
- *
- * \version     1.0.0
- * \date        Friday,14/11/21
- * \author      Sam.Wu <yihui.wu@amlgic.com>
- *
- * Copyright (c) 2014 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include "../v2_burning_i.h"
 #include "../v2_sdc_burn/optimus_sdc_burn_i.h"
 #include "../v2_sdc_burn/optimus_led.h"

@@ -1,15 +1,6 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * UBIFS u-boot wrapper functions header
- *
- * Copyright (C) 2006-2008 Nokia Corporation
- *
- * (C) Copyright 2008-2009
- * Stefan Roese, DENX Software Engineering, sr@denx.de.
- *
- * SPDX-License-Identifier:	GPL-2.0+
- *
- * Authors: Artem Bityutskiy (Битюцкий Артём)
- *          Adrian Hunter
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #ifndef __UBIFS_UBOOT_H__

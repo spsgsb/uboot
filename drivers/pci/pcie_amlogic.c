@@ -1,12 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Amlogic A113 PCI Express Root-Complex driver
- *
- * Copyright (C) 2017 Yue Wang <yue.wang@amlogic.com>
- *
- * Based on Linux kernel driver:
- * pcie-amlogic.c:
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include <common.h>
 #include <pci.h>
 #include <asm/arch/clock.h>

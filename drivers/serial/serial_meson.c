@@ -1,13 +1,7 @@
-/*******************************************************************
- *
- *  Copyright C 2010 by Amlogic, Inc. All Rights Reserved.
- *
- *  Description: Serial driver.
- *
- *  Author: Jerry Yu
- *  Created: 2009-3-12
- *
- *******************************************************************/
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
 #include <config.h>
 #include <common.h>

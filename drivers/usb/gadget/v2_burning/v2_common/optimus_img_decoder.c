@@ -1,14 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * \file        optimus_img_decoder.c
- * \brief
- *
- * \version     1.0.0
- * \date        2013-7-8
- * \author      Sam.Wu <yihui.wu@amlogic.com>
- *
- * Copyright (c) 2013 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include "../v2_sdc_burn/optimus_sdc_burn_i.h"
 
 //FIMXE:

@@ -1,14 +1,8 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * \file        storage_if.h
- * \brief       interfaces declarations for storage operations
- *
- * \version     1.0.0
- * \date        2013-7-16
- * \author      Sam.Wu <yihui.wu@amlgic.com>
- *
- * Copyright (c) 2013 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #ifndef __STOARGE_IF_H__
 #define __STOARGE_IF_H__
 

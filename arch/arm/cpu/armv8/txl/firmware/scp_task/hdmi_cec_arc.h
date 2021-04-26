@@ -1,14 +1,7 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * arch/arm/cpu/armv8/txl/firmware/scp_task/hdmi_cec_arc.h
- *
- * Copyright (C) 2012 AMLOGIC, INC. All Rights Reserved.
- * Author: hongmin hua <hongmin hua@amlogic.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the smems of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License.
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
-
 
 #ifndef _HDMI_CEC_ARC_H
 #define _HDMI_CEC_ARC_H

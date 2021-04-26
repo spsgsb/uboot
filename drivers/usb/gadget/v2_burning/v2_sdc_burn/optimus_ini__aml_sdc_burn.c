@@ -1,14 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * \file        optimus_ini__aml_sdc_burn.c
- * \brief       parse the aml_sdc_burn.ini
- *
- * \version     1.0.0
- * \date        2015/2/3
- * \author      Sam.Wu <yihui.wu@amlgic.com>
- *
- * Copyright (c) 2015 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include "optimus_sdc_burn_i.h"
 
 #define dbg(fmt ...)  //printf("[INI_SDC]"fmt)

@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
+
 void *memcpy(void *dest, const void *src, unsigned int count)
 {
 	char *tmp = dest;

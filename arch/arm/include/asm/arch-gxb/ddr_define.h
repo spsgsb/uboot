@@ -1,5 +1,8 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
-/* ddr type defines */
 #define CONFIG_DDR_TYPE_DDR3				0
 #define CONFIG_DDR_TYPE_LPDDR2				1
 #define CONFIG_DDR_TYPE_LPDDR3				2

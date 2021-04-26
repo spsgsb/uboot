@@ -1,9 +1,6 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright (C) 2014-2017 Amlogic, Inc. All rights reserved.
- *
- * Command to display Amlogic GX-family SoC Chip ID
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #include <common.h>

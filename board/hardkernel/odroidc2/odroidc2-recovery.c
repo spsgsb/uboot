@@ -1,8 +1,6 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright (C) 2015 Hardkernel Co,. Ltd
- * Dongjin Kim <tobetter@gmail.com>
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #include <common.h>

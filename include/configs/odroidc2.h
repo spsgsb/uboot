@@ -1,11 +1,6 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * Copyright (C) 2015 Hardkernel Co,. Ltd
- * Dongjin Kim <tobetter@gmail.com>
- *
- * Configuration settings for ODROID-C2 (AMLogic S905) board,
- * cloned from include/configs/gxb_p200_v1.h
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #ifndef __ODROID_C2_H__

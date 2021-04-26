@@ -1,17 +1,8 @@
-/***************************************************************************
- Title:      pcie.h
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
- Author:     augustine.jiang
-
- Created:    20:07:53 15/03/2017
-
- Description:
-
- Note:
-
- History:
-
-***************************************************************************/
 #ifndef PCIE__H
 #define PCIE__H
 

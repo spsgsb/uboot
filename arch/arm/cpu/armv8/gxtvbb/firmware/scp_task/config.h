@@ -1,17 +1,8 @@
-
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
-  * BL301 whole memory : 16KB
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
-  * Secure Priority Task Entry					128B
-  * High Priority Task Entry						128B
-  * Low Priority Task Entry						128B
-
-  * Code, data, bss
-
-  * Secure Task share memory:				1k
-  * High Priority Task share memory:		1K
-  * Low Priority Task share memory:		1k
-*/
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 

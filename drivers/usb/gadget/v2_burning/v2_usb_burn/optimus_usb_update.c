@@ -1,16 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * \file        optimus_usb_update.c
- * \brief       usb_update command to burn a parition image from usb host
- *              this update based on the burner is latest: (uboot for burnner can run from peripherals such as sdmmc/usb)
- *
- * \version     1.0.0
- * \date        2014-9-15
- * \author      Chunyu.Song<chunyu.song@amlogic.com>
- *		        Sam.Wu <yihui.wu@amlogic.com>
- *
- * Copyright (c) 2013 Amlogic. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include "../v2_sdc_burn/optimus_sdc_burn_i.h"
 
 typedef int __hFileHdl;

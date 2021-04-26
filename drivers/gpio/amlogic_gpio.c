@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright (C) 2015 Amlogic Inc
- * Written by Xing Xu <xing.xu@amlogic.com>
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
+
 #include <common.h>
 #include <dm.h>
 #include <asm/gpio.h>

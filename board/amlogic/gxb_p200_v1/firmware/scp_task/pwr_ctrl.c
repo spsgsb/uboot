@@ -1,4 +1,7 @@
-/*p200/201	GPIOAO_2  powr on	:0, power_off	:1*/
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
 
 #define __SUSPEND_FIRMWARE__
 #include <config.h>

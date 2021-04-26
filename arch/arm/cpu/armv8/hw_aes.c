@@ -1,9 +1,8 @@
-
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Amlogic AES hardware acceleration
- *
- * Copyright (C) 2015 Amlogic, Inc. All rights reserved.
-*/
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
+
 #include <common.h>
 #include <asm/hw_aes.h>
 #include <asm/arch/secure_apb.h>

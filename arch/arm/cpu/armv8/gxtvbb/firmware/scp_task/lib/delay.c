@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ */
+
 #define P_EE_TIMER_E		(*((volatile unsigned *)(0xc1100000 + (0x2662 << 2))))
 #define P_AO_TIMER_E		(*((volatile unsigned *)(0xc8100000 + (0x15 << 2))))
 #define P_EE_TIMER_CTRL		(*((volatile unsigned *)(0xc8100000 + (0x13 << 2))))

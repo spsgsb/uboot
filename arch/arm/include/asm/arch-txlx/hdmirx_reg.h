@@ -1,14 +1,6 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * arch/arm/include/asm/arch-txlx/hdmirx_reg.h
- *
- * rx_reg.h brief registers address in HDMI RX module.
- *
- * Copyright (C) 2012 AMLOGIC, INC. All Rights Reserved.
- * Author: hongmin hua <hongmin hua@amlogic.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the smems of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License.
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #ifndef HDMIRX_REG_H_

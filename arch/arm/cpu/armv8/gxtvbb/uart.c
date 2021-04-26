@@ -1,11 +1,6 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * (C) Copyright 2016
- * Hu Jian,Software Engineering, jian.hu@amlogic.com.
- *
- * Basic support for the uarts on gxtvbb,include three EE uarts and two AO uarts.
- * the fourth EE uart(UART_D) is different and will complete in the future.
- *
- * SPDX-License-Identifier:	GPL-2.0+
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #include <config.h>

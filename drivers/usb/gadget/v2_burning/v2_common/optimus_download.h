@@ -1,13 +1,6 @@
+/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 /*
- * \file        optimus_download.h
- * \brief       common included files for optimus_*.c
- *
- * \version     1.0.0
- * \date        2013/5/3
- * \author      Sam.Wu <yihui.wu@Amlogic.com>
- *
- * Copyright (c) 2013 Amlogic Inc.. All Rights Reserved.
- *
+ * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
  */
 
 #ifndef __OPTIMUS_DOWNLOAD_H__
