@@ -161,12 +161,14 @@ static bool slot_is_bootable(AvbABSlotData* slot) {
 }
 
 static void consume_boot_try(AvbABSlotData* slot) {
-    --(slot->tries_remaining);
+    if (slot->tries_remaining > 0) {
+        --(slot->tries_remaining);
+    }
     slot->successful_boot = 0;
 }
 
 static bool should_failover(AvbABSlotData* slot) {
-    return slot->tries_remaining <= 0;
+    return slot->tries_remaining <= 0 || slot->tries_remaining > AVB_AB_MAX_TRIES_REMAINING;
 }
 
 int boot_info_set_active_slot(AvbABData* info, int slot)
