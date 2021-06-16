@@ -160,6 +160,7 @@
             "run storeargs;"\
             "get_valid_slot;"\
             "setenv bootargs ${bootargs} androidboot.slot_suffix=${active_slot};" \
+            "consume_boot_try;"\
             "if imgread kernel ${boot_part} ${loadaddr}; then bootm ${loadaddr}; fi;"\
             "run update;"\
             "\0"\
@@ -232,7 +233,6 @@
 
 #define CONFIG_PREBOOT  \
             "run bcb_cmd; "\
-            "consume_boot_try;"\
             "run init_display;"\
             "run storeargs;"\
             "bcb uboot-command;"
