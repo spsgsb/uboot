@@ -51,6 +51,10 @@
 #define     MMC_ENV_NAME                    "env"
 #define     MMC_ENV_SIZE                    (8*SZ_1M)
 
+#define     FIP_A_NAME                    "fip_a"
+#define     FIP_B_NAME                    "fip_b"
+#define     FIP_SIZE                    (4*SZ_1M)
+
 #define     MMC_KEY_NAME                    "key"
 #define     MMC_KEY_SIZE                    (256*1024)
 #define     EMMCKEY_RESERVE_OFFSET           (0x4000)
