@@ -50,6 +50,9 @@
 #ifdef CONFIG_AML_LCD
 #include <amlogic/aml_lcd.h>
 #endif
+#ifdef CONFIG_SPOTIFY_PROBE_HW
+#include <spotify/hw_probe.h>
+#endif
 #include <asm/arch/eth_setup.h>
 #include <phy.h>
 #include <linux/mtd/partitions.h>
@@ -679,6 +682,12 @@ void aml_config_dtb(void)
 	return;
 }
 
+#ifdef CONFIG_SPOTIFY_PROBE_HW
+int plat_i2c_read(int reg, int addr) {
+    return -1;
+}
+#endif
+
 #ifdef CONFIG_BOARD_LATE_INIT
 int board_late_init(void)
 {
@@ -734,6 +743,22 @@ int board_late_init(void)
 	run_command("cvbs init", 0);
 #endif
 #ifdef CONFIG_AML_LCD
+#ifdef CONFIG_SPOTIFY_PROBE_HW
+    //probe display stack
+    sp_display_stack d;
+
+    d = sp_probe_display_stack(&plat_i2c_read);
+    switch (d) {
+        case STACK_BOE:
+            printf("BOE display detected!");
+            break;
+        case STACK_WILY:
+            printf("WILY display detected!");
+            break;
+        default:
+            printf("Unknown display!");
+    }
+#endif
 	run_command("setenv outputmode panel", 0);
 	lcd_probe();
 #endif
