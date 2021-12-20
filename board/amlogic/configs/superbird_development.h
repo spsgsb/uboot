@@ -239,6 +239,8 @@
 
 #define CONFIG_BOOTCOMMAND "run check_charger"
 
+#define CONFIG_SPOTIFY_PROBE_HW 1
+
 //#define CONFIG_ENV_IS_NOWHERE  1
 #define CONFIG_ENV_SIZE   (64*1024)
 #define CONFIG_FIT 1
