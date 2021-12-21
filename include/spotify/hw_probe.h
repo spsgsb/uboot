@@ -14,9 +14,9 @@ enum sp_board_revision_e {
 typedef enum sp_board_revision_e sp_board_revision;
 
 enum sp_display_stack_e {
-    STACK_BOE = 0,
+    STACK_BOE = 0x00,
     STACK_WILY,
-    STACK_UNKNOWN
+    STACK_UNKNOWN = 0xff
 };
 typedef enum sp_display_stack_e sp_display_stack;
 
