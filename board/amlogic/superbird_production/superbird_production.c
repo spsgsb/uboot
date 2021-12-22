@@ -750,12 +750,15 @@ int board_late_init(void)
     d = sp_probe_display_stack(&plat_i2c_read);
     switch (d) {
         case STACK_BOE:
+            setenv("display_stack", "boe");
             printf("lcd: BOE display detected!\n");
             break;
         case STACK_WILY:
+            setenv("display_stack", "wily");
             printf("lcd: WILY display detected!\n");
             break;
         default:
+            setenv("display_stack", "unknown");
             printf("lcd: Unknown display!\n");
     }
 #endif
