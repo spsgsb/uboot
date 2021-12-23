@@ -27,6 +27,9 @@
 #include <libfdt.h>
 #include <asm/cpu_id.h>
 #include <asm/arch/secure_apb.h>
+#if defined(CONFIG_DM_I2C)
+#include <i2c.h>
+#endif
 #ifdef CONFIG_SYS_I2C_AML
 #include <aml_i2c.h>
 #endif
@@ -683,8 +686,35 @@ void aml_config_dtb(void)
 }
 
 #ifdef CONFIG_SPOTIFY_PROBE_HW
-int plat_i2c_read(int reg, int addr) {
-    return -1;
+int32_t plat_i2c_write(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len) {
+    int ret;
+    struct udevice *dev;
+
+    ret = i2c_get_chip_for_busnum(0, addr, &dev);
+    if (ret != 0)
+        return ret;
+
+    ret = i2c_set_chip_offset_len(dev, 2);
+    if (ret != 0)
+        return ret;
+
+    return i2c_write(dev, reg, buffer, buffer_len);
+}
+
+
+int32_t plat_i2c_read(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len) {
+    int ret;
+    struct udevice *dev;
+
+    ret = i2c_get_chip_for_busnum(0, addr, &dev);
+    if (ret != 0)
+        return ret;
+
+    ret = i2c_set_chip_offset_len(dev, 2);
+    if (ret != 0)
+        return ret;
+
+    return i2c_read(dev, reg, buffer, buffer_len);
 }
 #endif
 
@@ -744,22 +774,28 @@ int board_late_init(void)
 #endif
 #ifdef CONFIG_AML_LCD
 #ifdef CONFIG_SPOTIFY_PROBE_HW
+    // enable touch i2c bus
+    run_command("mw.b 0xff6346d8 0x00000044", 0);
+
     //probe display stack
     sp_display_stack d;
+    sp_plat_i2c_ops ops;
+    ops.read = &plat_i2c_read;
+    ops.write = &plat_i2c_write;
+    d = sp_probe_display_stack(&ops);
 
-    d = sp_probe_display_stack(&plat_i2c_read);
     switch (d) {
         case STACK_BOE:
             setenv("display_stack", "boe");
-            printf("lcd: BOE display detected!\n");
+            printf("sp_hw_probe: BOE display detected!\n");
             break;
         case STACK_WILY:
             setenv("display_stack", "wily");
-            printf("lcd: WILY display detected!\n");
+            printf("sp_hw_probe: WILY display detected!\n");
             break;
         default:
             setenv("display_stack", "unknown");
-            printf("lcd: Unknown display!\n");
+            printf("sp_hw_probe: Unknown display!\n");
     }
 #endif
 	run_command("setenv outputmode panel", 0);
