@@ -686,37 +686,35 @@ void aml_config_dtb(void)
 }
 
 #ifdef CONFIG_SPOTIFY_PROBE_HW
-int plat_i2c_read(int addr, int reg, void* buff, size_t buff_len) {
-    uint16_t direct_addr = 0x42bd;
-    unsigned char cmd_2dma_42bd[6]={0x28, 0x35, 0xc1, 0x00, 0x35, 0xae};
-
-    printf("sp_hw_probe: i2c start\n");
-    int ret, i;
+int32_t plat_i2c_write(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len) {
+    int ret;
     struct udevice *dev;
 
     ret = i2c_get_chip_for_busnum(0, addr, &dev);
     if (ret != 0)
-        goto error;
+        return ret;
 
-    ret = i2c_write(dev, direct_addr, cmd_2dma_42bd, 6);
-    printf("sp_hw_probe: enable dma\n");
+    ret = i2c_set_chip_offset_len(dev, 2);
     if (ret != 0)
-        goto error;
+        return ret;
 
-    udelay(50);
+    return i2c_write(dev, reg, buffer, buffer_len);
+}
 
-    ret = i2c_read(dev, addr, buff, buff_len);
-    printf("sp_hw_probe: read conf\n");
-    if (ret)
-        goto error;
 
-    uint8_t* b = buff;
-    for (i = 0; i < buff_len; i++)
-        printf("sp_hw_probe: 0x%x\n", b[i]);
+int32_t plat_i2c_read(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len) {
+    int ret;
+    struct udevice *dev;
 
-error:
-    printf("sp_hw_probe: i2c end\n");
-    return ret;
+    ret = i2c_get_chip_for_busnum(0, addr, &dev);
+    if (ret != 0)
+        return ret;
+
+    ret = i2c_set_chip_offset_len(dev, 2);
+    if (ret != 0)
+        return ret;
+
+    return i2c_read(dev, reg, buffer, buffer_len);
 }
 #endif
 
@@ -781,8 +779,11 @@ int board_late_init(void)
 
     //probe display stack
     sp_display_stack d;
+    sp_plat_i2c_ops ops;
+    ops.read = &plat_i2c_read;
+    ops.write = &plat_i2c_write;
+    d = sp_probe_display_stack(&ops);
 
-    d = sp_probe_display_stack(&plat_i2c_read);
     switch (d) {
         case STACK_BOE:
             setenv("display_stack", "boe");
