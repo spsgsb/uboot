@@ -27,6 +27,9 @@
 #include <libfdt.h>
 #include <asm/cpu_id.h>
 #include <asm/arch/secure_apb.h>
+#if defined(CONFIG_DM_I2C)
+#include <i2c.h>
+#endif
 #ifdef CONFIG_SYS_I2C_AML
 #include <aml_i2c.h>
 #endif
@@ -49,6 +52,9 @@
 #endif
 #ifdef CONFIG_AML_LCD
 #include <amlogic/aml_lcd.h>
+#endif
+#ifdef CONFIG_SPOTIFY_PROBE_HW
+#include <spotify/hw_probe.h>
 #endif
 #include <asm/arch/eth_setup.h>
 #include <phy.h>
@@ -679,6 +685,39 @@ void aml_config_dtb(void)
 	return;
 }
 
+#ifdef CONFIG_SPOTIFY_PROBE_HW
+int32_t plat_i2c_write(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len) {
+    int ret;
+    struct udevice *dev;
+
+    ret = i2c_get_chip_for_busnum(0, addr, &dev);
+    if (ret != 0)
+        return ret;
+
+    ret = i2c_set_chip_offset_len(dev, 2);
+    if (ret != 0)
+        return ret;
+
+    return i2c_write(dev, reg, buffer, buffer_len);
+}
+
+
+int32_t plat_i2c_read(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len) {
+    int ret;
+    struct udevice *dev;
+
+    ret = i2c_get_chip_for_busnum(0, addr, &dev);
+    if (ret != 0)
+        return ret;
+
+    ret = i2c_set_chip_offset_len(dev, 2);
+    if (ret != 0)
+        return ret;
+
+    return i2c_read(dev, reg, buffer, buffer_len);
+}
+#endif
+
 #ifdef CONFIG_BOARD_LATE_INIT
 int board_late_init(void)
 {
@@ -734,6 +773,31 @@ int board_late_init(void)
 	run_command("cvbs init", 0);
 #endif
 #ifdef CONFIG_AML_LCD
+#ifdef CONFIG_SPOTIFY_PROBE_HW
+    // enable touch i2c bus
+    run_command("mw.b 0xff6346d8 0x00000044", 0);
+
+    //probe display stack
+    sp_display_stack d;
+    sp_plat_i2c_ops ops;
+    ops.read = &plat_i2c_read;
+    ops.write = &plat_i2c_write;
+    d = sp_probe_display_stack(&ops);
+
+    switch (d) {
+        case STACK_BOE:
+            setenv("display_stack", "boe");
+            printf("sp_hw_probe: BOE display detected!\n");
+            break;
+        case STACK_WILY:
+            setenv("display_stack", "wily");
+            printf("sp_hw_probe: WILY display detected!\n");
+            break;
+        default:
+            setenv("display_stack", "unknown");
+            printf("sp_hw_probe: Unknown display!\n");
+    }
+#endif
 	run_command("setenv outputmode panel", 0);
 	lcd_probe();
 #endif

@@ -97,6 +97,7 @@
         "loadaddr=1080000\0"\
         "panel_type=lcd_8\0" \
         "outputmode=panel\0" \
+        "display_stack=unknown\0"\
         "display_width=480\0" \
         "display_height=800\0" \
         "display_bpp=16\0" \
@@ -218,6 +219,8 @@
             "bcb uboot-command;"
 
 #define CONFIG_BOOTCOMMAND "run check_charger"
+
+#define CONFIG_SPOTIFY_PROBE_HW 1
 
 //#define CONFIG_ENV_IS_NOWHERE  1
 #define CONFIG_ENV_SIZE   (64*1024)
