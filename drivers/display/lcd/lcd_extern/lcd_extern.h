@@ -76,7 +76,6 @@ extern int aml_lcd_extern_mipi_TV070WSM_probe(struct aml_lcd_extern_driver_s *ex
 
 #ifdef CONFIG_AML_LCD_EXTERN_MIPI_ST7701
 extern int aml_lcd_extern_mipi_st7701_probe(struct aml_lcd_extern_driver_s *ext_drv);
-extern int aml_lcd_extern_mipi_st7701_wily_probe(struct aml_lcd_extern_driver_s *ext_drv);
 #endif
 #ifdef CONFIG_AML_LCD_EXTERN_MIPI_P070ACB
 extern int aml_lcd_extern_mipi_p070acb_probe(struct aml_lcd_extern_driver_s *ext_drv);
