@@ -106,14 +106,14 @@
 /* args/envs */
 #define CONFIG_SYS_MAXARGS  64
 #define CONFIG_EXTRA_ENV_SETTINGS \
-        "silent=on\0"\
+        "silent=off\0"\
         "firstboot=1\0"\
         "upgrade_step=0\0"\
         "jtag=disable\0"\
         "loadaddr=1080000\0"\
         "panel_type=lcd_8\0" \
         "outputmode=panel\0" \
-        "lcd_debug_test=1\0" \
+        "lcd_debug_test=0\0" \
         "display_stack=unknown\0"\
         "display_width=480\0" \
         "display_height=800\0" \
