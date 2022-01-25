@@ -778,7 +778,8 @@ int board_late_init(void)
     run_command("mw.b 0xff6346d8 0x00000044", 0);
 
     //probe display stack
-    const char *ds;
+    const char *ds, *pt;
+    char c = 0;
     sp_display_stack d;
     sp_plat_i2c_ops ops;
     ops.read = &plat_i2c_read;
@@ -788,19 +789,31 @@ int board_late_init(void)
     switch (d) {
         case STACK_BOE:
             ds = "boe";
+            pt = "lcd_8";
             printf("sp_hw_probe: BOE display detected!\n");
             break;
         case STACK_WILY:
             ds = "wily";
+            pt = "lcd_9";
             printf("sp_hw_probe: WILY display detected!\n");
             break;
         default:
             ds = "unknown";
+            pt = "lcd_8";
             printf("sp_hw_probe: Unknown display!\n");
     }
 
     if (strcmp(getenv("display_stack"), ds)) {
         setenv("display_stack", ds);
+        c = 1;
+    }
+
+    if (strcmp(getenv("panel_type"), pt)) {
+        setenv("panel_type", pt);
+        c = 1;
+    }
+
+    if (c == 1) {
         saveenv();
     }
 #endif

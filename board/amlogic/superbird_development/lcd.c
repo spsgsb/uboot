@@ -663,7 +663,7 @@ struct lcd_extern_config_s ext_config_dtf[LCD_EXTERN_NUM_MAX] = {
 	},
 	{ /* ST7701S */
 		.index = 7,
-		.name = "mipi_default",
+		.name = "mipi_ST7701",
 		.type = LCD_EXTERN_MIPI, /* LCD_EXTERN_I2C, LCD_EXTERN_SPI, LCD_EXTERN_MIPI, LCD_EXTERN_MAX */
 		.status = 1, /* 0=disable, 1=enable */
 		.cmd_size = LCD_EXT_CMD_SIZE_DYNAMIC,
@@ -674,7 +674,7 @@ struct lcd_extern_config_s ext_config_dtf[LCD_EXTERN_NUM_MAX] = {
 	},
 	{ /* ST7701S wily */
 		.index = 8,
-		.name = "mipi_default",
+		.name = "mipi_ST7701_wily",
 		.type = LCD_EXTERN_MIPI, /* LCD_EXTERN_I2C, LCD_EXTERN_SPI, LCD_EXTERN_MIPI, LCD_EXTERN_MAX */
 		.status = 1, /* 0=disable, 1=enable */
 		.cmd_size = LCD_EXT_CMD_SIZE_DYNAMIC,
