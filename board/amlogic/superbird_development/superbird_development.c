@@ -797,6 +797,11 @@ int board_late_init(void)
             pt = "lcd_9";
             printf("sp_hw_probe: WILY display detected!\n");
             break;
+        case STACK_HOLITECH:
+            ds = "holitech";
+            pt = "lcd_10";
+            printf("sp_hw_probe: HOLITECH display detected!\n");
+            break;
         default:
             ds = "unknown";
             pt = "lcd_8";

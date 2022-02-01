@@ -309,12 +309,28 @@ struct ext_lcd_config_s ext_lcd_config[LCD_NUM_MAX] = {
     {/* ST7701S wily */
     "lcd_9",LCD_MIPI,8,
     /* basic timing, h_act, v_act, h_per, v_per, hs_width, hs_bp, hs_pol, vs_width, vs_bp, vs_pol */
-    /*480,800,630,836,10,50,0,4,20,0,*/
     480,800,630,836,12,80,0,4,18,0,
     /* clk_attr */
     0,0,1,31600800,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,
     /* mipi_attr */
-    2,400,0,1,0,2,0,0,Rsv_val,7,
+    2,400,0,1,0,2,0,0,Rsv_val,8,
+    /* power step */
+    lcd_power_on_step_ST7701S_wily, lcd_power_off_step_ST7701S_wily,
+    /* backlight */
+    100,255,10,128,128,
+    BL_CTRL_PWM,0,1,0,200,200,
+    BL_PWM_NEGATIVE,BL_PWM_F,180,100,25,1,1,
+    Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,
+    Rsv_val,Rsv_val,Rsv_val,Rsv_val,
+    10,10,Rsv_val},
+    {/* ST7701S holitech */
+    "lcd_10",LCD_MIPI,8,
+    /* basic timing, h_act, v_act, h_per, v_per, hs_width, hs_bp, hs_pol, vs_width, vs_bp, vs_pol */
+    480,800,550,844,10,30,0,4,20,0,
+    /* clk_attr */
+    0,0,1,28000000,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,Rsv_val,
+    /* mipi_attr */
+    2,400,0,1,0,2,0,0,Rsv_val,9,
     /* power step */
     lcd_power_on_step_ST7701S_wily, lcd_power_off_step_ST7701S_wily,
     /* backlight */
@@ -450,6 +466,18 @@ static unsigned char mipi_init_off_table_ST7701S_wily[DSI_INIT_OFF_MAX] = {//tab
     0xff, 0,
 };
 
+static unsigned char mipi_init_on_table_ST7701S_holitech[DSI_INIT_ON_MAX] = {//table size < 100
+    0x05, 1, 0x11,
+    0xfd, 1, 120,
+    0x05, 1, 0x29,
+    0xff, 0xff,
+};
+static unsigned char mipi_init_off_table_ST7701S_holitech[DSI_INIT_OFF_MAX] = {//table size < 50
+    0x05, 1, 0x28,
+    0xfd, 1, 10,
+    0x05, 1, 0x10,
+    0xff, 0,
+};
 
 static struct dsi_config_s lcd_mipi_config = {
 	.lane_num = 4,
@@ -575,7 +603,7 @@ static unsigned char ext_init_off_table[LCD_EXTERN_INIT_OFF_MAX] = {
 
 struct lcd_extern_common_s ext_common_dft = {
 	.lcd_ext_key_valid = 0,
-	.lcd_ext_num = 6,
+	.lcd_ext_num = 10,
 	.i2c_bus = LCD_EXTERN_I2C_BUS_0, /* LCD_EXTERN_I2C_BUS_0/1/2/3/4 */
 	.pinmux_set = {{LCD_PINMUX_END, 0x0}},
 	.pinmux_clr = {{LCD_PINMUX_END, 0x0}},
@@ -683,6 +711,17 @@ struct lcd_extern_config_s ext_config_dtf[LCD_EXTERN_NUM_MAX] = {
 		.table_init_off = ext_init_off_table_ST7701S_wily,
 		.table_init_off_cnt = sizeof(ext_init_off_table_ST7701S_wily),
 	},
+	{ /* ST7701S holitech */
+		.index = 9,
+		.name = "mipi_ST7701_holitech",
+		.type = LCD_EXTERN_MIPI, /* LCD_EXTERN_I2C, LCD_EXTERN_SPI, LCD_EXTERN_MIPI, LCD_EXTERN_MAX */
+		.status = 1, /* 0=disable, 1=enable */
+		.cmd_size = LCD_EXT_CMD_SIZE_DYNAMIC,
+		.table_init_on = ext_init_on_table_ST7701S_holitech,
+		.table_init_on_cnt = sizeof(ext_init_on_table_ST7701S_holitech),
+		.table_init_off = ext_init_off_table_ST7701S_holitech,
+		.table_init_off_cnt = sizeof(ext_init_off_table_ST7701S_holitech),
+	},
 	{
 		.index = LCD_EXTERN_INDEX_INVALID,
 	},
@@ -784,6 +823,10 @@ void lcd_config_bsp_init(void)
 				case 9:
 					lcd_mipi_config.dsi_init_on = mipi_init_on_table_ST7701S_wily;
 					lcd_mipi_config.dsi_init_off = mipi_init_off_table_ST7701S_wily;
+					break;
+				case 10:
+					lcd_mipi_config.dsi_init_on = mipi_init_on_table_ST7701S_holitech;
+					lcd_mipi_config.dsi_init_off = mipi_init_off_table_ST7701S_holitech;
 					break;
 				case 0:
 				default:

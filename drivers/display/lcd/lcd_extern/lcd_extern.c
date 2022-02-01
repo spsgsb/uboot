@@ -1429,6 +1429,10 @@ static int aml_lcd_extern_add_mipi(struct aml_lcd_extern_driver_s *ext_drv)
 #ifdef CONFIG_AML_LCD_EXTERN_MIPI_ST7701
 		ret = aml_lcd_extern_mipi_st7701_wily_probe(ext_drv);
 #endif
+	} else if (strcmp(ext_drv->config->name, "mipi_ST7701_holitech") == 0) {
+#ifdef CONFIG_AML_LCD_EXTERN_MIPI_ST7701
+		ret = aml_lcd_extern_mipi_st7701_holitech_probe(ext_drv);
+#endif
 	} else if (strcmp(ext_drv->config->name, "mipi_P070ACB") == 0) {
 #ifdef CONFIG_AML_LCD_EXTERN_MIPI_P070ACB
 		ret = aml_lcd_extern_mipi_p070acb_probe(ext_drv);
@@ -1611,6 +1615,12 @@ static int aml_lcd_extern_add_driver_default(int index,
 #ifdef CONFIG_AML_LCD_EXTERN_MIPI_ST7701
 	if (strcmp(ext_drv->config->name, "mipi_ST7701_wily") == 0) {
 		ret = aml_lcd_extern_mipi_st7701_wily_probe(ext_drv);
+		goto add_driver_default_end;
+	}
+#endif
+#ifdef CONFIG_AML_LCD_EXTERN_MIPI_ST7701
+	if (strcmp(ext_drv->config->name, "mipi_ST7701_holitech") == 0) {
+		ret = aml_lcd_extern_mipi_st7701_holitech_probe(ext_drv);
 		goto add_driver_default_end;
 	}
 #endif

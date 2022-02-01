@@ -16,6 +16,7 @@ typedef enum sp_board_revision_e sp_board_revision;
 enum sp_display_stack_e {
     STACK_BOE = 0x00,
     STACK_WILY,
+    STACK_HOLITECH,
     STACK_UNKNOWN = 0xff
 };
 typedef enum sp_display_stack_e sp_display_stack;
@@ -50,12 +51,17 @@ typedef struct sp_display_stack_conf_s sp_display_stack_conf;
 #define WILY_VENDOR_ID 0x70
 #define WILY_HW_ID 0x2d5c
 
+// tlsc6x: cfg_ver: 0x40e223d, chip_code: 0xd5c, ver: 1, vendor_id: 0x11
+#define HOLITECH_VENDOR_ID 0x11
+#define HOLITECH_HW_ID 0xd5c
+
 static const sp_display_stack_conf sp_display_stack_confs[] = {
     { BOE_VENDOR_ID, BOE_HW_ID, STACK_BOE },
     { WILY_VENDOR_ID, WILY_HW_ID, STACK_WILY },
+    { HOLITECH_VENDOR_ID, HOLITECH_HW_ID, STACK_HOLITECH },
 };
 
-static const size_t sp_display_stack_confs_len = 2;
+static const size_t sp_display_stack_confs_len = 3;
 
 typedef int32_t (*sp_plat_i2c_read)(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len);
 typedef int32_t (*sp_plat_i2c_write)(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len);
@@ -191,7 +197,7 @@ sp_display_stack sp_probe_display_stack(sp_plat_i2c_ops* ops) {
     for (i = 0; i < sp_display_stack_confs_len; i++) {
         c = sp_display_stack_confs[i];
 
-        if (c.hw_id == p.hw_id) {
+        if (c.vendor_id == p.vendor_id && c.hw_id == p.hw_id) {
             printf("sp_hw_probe: display stack end\n");
             return c.id;
         }
