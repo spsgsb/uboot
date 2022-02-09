@@ -778,7 +778,7 @@ int board_late_init(void)
     run_command("mw.b 0xff6346d8 0x00000044", 0);
 
     //probe display stack
-    const char *ds;
+    const char *cur, *ds;
     sp_display_stack d;
     sp_plat_i2c_ops ops;
     ops.read = &plat_i2c_read;
@@ -799,7 +799,8 @@ int board_late_init(void)
             printf("sp_hw_probe: Unknown display!\n");
     }
 
-    if (strcmp(getenv("display_stack"), ds)) {
+    cur = getenv("display_stack");
+    if (cur == NULL || strcmp(cur, ds)) {
         setenv("display_stack", ds);
         saveenv();
     }
