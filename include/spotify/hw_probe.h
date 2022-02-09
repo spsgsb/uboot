@@ -7,11 +7,44 @@
 #define __SPOTIFY_HW_PROBE__
 
 enum sp_board_revision_e {
-    REV_A = 0x00,
-    REV_B,
+    REV_1 = 1,
+    REV_2,
+    REV_3,
+    REV_4,
+    REV_5,
+    REV_6,
+    REV_7,
+    REV_8,
+    REV_9,
+    REV_10,
+    REV_11,
+    REV_12,
     REV_UNKNOWN = 0xff
 };
 typedef enum sp_board_revision_e sp_board_revision;
+
+struct sp_board_revision_conf_s {
+    sp_board_revision rev;
+    uint16_t hw_id;
+};
+typedef struct sp_board_revision_conf_s sp_board_revision_conf;
+
+static const sp_board_revision_conf sp_board_revision_confs[] = {
+    { REV_UNKNOWN, 0 },
+    { REV_1, 85 },
+    { REV_2, 167 },
+    { REV_3, 248 },
+    { REV_4, 334 },
+    { REV_5, 420 },
+    { REV_6, 512 },
+    { REV_7, 603 },
+    { REV_8, 689 },
+    { REV_9, 775 },
+    { REV_10, 856 },
+    { REV_11, 938 },
+    { REV_12, 1023 },
+    { REV_UNKNOWN, 2048 },
+};
 
 enum sp_display_stack_e {
     STACK_BOE = 0x00,
@@ -55,8 +88,9 @@ static const sp_display_stack_conf sp_display_stack_confs[] = {
     { WILY_VENDOR_ID, WILY_HW_ID, STACK_WILY },
 };
 
-static const size_t sp_display_stack_confs_len = 2;
+static const size_t sp_display_stack_confs_len = ARRAY_SIZE(sp_display_stack_confs);
 
+typedef uint16_t (*sp_plat_saradc_read)(void);
 typedef int32_t (*sp_plat_i2c_read)(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len);
 typedef int32_t (*sp_plat_i2c_write)(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len);
 
@@ -67,8 +101,24 @@ struct sp_plat_i2c_ops_s {
 typedef struct sp_plat_i2c_ops_s sp_plat_i2c_ops;
 
 // NOLINTNEXTLINE(misc-definitions-in-headers)
-sp_board_revision sp_probe_board_revision(void) {
-    return REV_A;
+sp_board_revision sp_board_rev_lookup(uint16_t x) {
+    uint16_t i, previous_hw_id, hw_id, next_hw_id;
+
+    for (i = 1; i < 13; i++) {
+        previous_hw_id = sp_board_revision_confs[i - 1].hw_id;
+        hw_id = sp_board_revision_confs[i].hw_id;
+        next_hw_id = sp_board_revision_confs[i + 1].hw_id;
+        if (((hw_id - previous_hw_id)/2 + previous_hw_id) <= x && x <= ((next_hw_id - hw_id)/2 + hw_id))
+            return sp_board_revision_confs[i].rev;
+    }
+
+    return REV_UNKNOWN;
+}
+
+// NOLINTNEXTLINE(misc-definitions-in-headers)
+sp_board_revision sp_probe_board_revision(sp_plat_saradc_read saradc_read) {
+    uint16_t r = saradc_read();
+    return sp_board_rev_lookup(r);
 }
 
 // NOLINTNEXTLINE(misc-definitions-in-headers)

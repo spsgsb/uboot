@@ -55,6 +55,7 @@
 #endif
 #ifdef CONFIG_SPOTIFY_PROBE_HW
 #include <spotify/hw_probe.h>
+#include <asm/saradc.h>
 #endif
 #include <asm/arch/eth_setup.h>
 #include <phy.h>
@@ -686,6 +687,15 @@ void aml_config_dtb(void)
 }
 
 #ifdef CONFIG_SPOTIFY_PROBE_HW
+uint16_t plat_saradc_read(void) {
+    uint16_t r;
+    saradc_enable();
+	r = get_adc_sample_gxbb(1);
+    saradc_disable();
+
+    return r;
+}
+
 int32_t plat_i2c_write(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffer_len) {
     int ret;
     struct udevice *dev;
@@ -774,10 +784,29 @@ int board_late_init(void)
 #endif
 #ifdef CONFIG_AML_LCD
 #ifdef CONFIG_SPOTIFY_PROBE_HW
+    char c = 0;
+    char *cur;
+
+    // probe board revision
+    char br[4];
+    sp_board_revision rev;
+
+    rev = sp_probe_board_revision(&plat_saradc_read);
+    printf("sp_hw_probe: Board revision %d detected!\n", rev);
+
+    sprintf(br, "%d", rev);
+
+    cur = getenv("board_revision");
+    if (cur == NULL || strcmp(cur, br)) {
+        setenv("board_revision", br);
+        c = 1;
+    }
+
     // enable touch i2c bus
-    run_command("mw.b 0xff6346d8 0x00000044", 0);
+    writel(0x00000044, 0xff6346d8);
 
     //probe display stack
+    const char *ds, *pt;
     sp_display_stack d;
     sp_plat_i2c_ops ops;
     ops.read = &plat_i2c_read;
@@ -796,6 +825,22 @@ int board_late_init(void)
         default:
             setenv("display_stack", "unknown");
             printf("sp_hw_probe: Unknown display!\n");
+    }
+
+    cur = getenv("display_stack");
+    if (cur == NULL || strcmp(cur, ds)) {
+        setenv("display_stack", ds);
+        c = 1;
+    }
+
+    cur = getenv("panel_type");
+    if (cur == NULL || strcmp(cur, pt)) {
+        setenv("panel_type", pt);
+        c = 1;
+    }
+
+    if (c == 1) {
+        saveenv();
     }
 #endif
 	run_command("setenv outputmode panel", 0);
