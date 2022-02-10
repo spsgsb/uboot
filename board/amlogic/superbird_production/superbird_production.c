@@ -690,7 +690,7 @@ void aml_config_dtb(void)
 uint16_t plat_saradc_read(void) {
     uint16_t r;
     saradc_enable();
-	r = get_adc_sample_gxbb(1);
+    r = get_adc_sample_gxbb(1);
     saradc_disable();
 
     return r;

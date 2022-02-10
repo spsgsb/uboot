@@ -690,7 +690,7 @@ void aml_config_dtb(void)
 uint16_t plat_saradc_read(void) {
     uint16_t r;
     saradc_enable();
-	r = get_adc_sample_gxbb(1);
+    r = get_adc_sample_gxbb(1);
     saradc_disable();
 
     return r;
@@ -806,7 +806,7 @@ int board_late_init(void)
     writel(0x00000044, 0xff6346d8);
 
     //probe display stack
-    const char *ds; 
+    const char *ds;
     sp_display_stack d;
     sp_plat_i2c_ops ops;
     ops.read = &plat_i2c_read;
