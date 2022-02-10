@@ -806,7 +806,7 @@ int board_late_init(void)
     writel(0x00000044, 0xff6346d8);
 
     //probe display stack
-    const char *ds, *pt;
+    const char *ds; 
     sp_display_stack d;
     sp_plat_i2c_ops ops;
     ops.read = &plat_i2c_read;
@@ -815,15 +815,15 @@ int board_late_init(void)
 
     switch (d) {
         case STACK_BOE:
-            setenv("display_stack", "boe");
+            ds = "boe";
             printf("sp_hw_probe: BOE display detected!\n");
             break;
         case STACK_WILY:
-            setenv("display_stack", "wily");
+            ds = "wily";
             printf("sp_hw_probe: WILY display detected!\n");
             break;
         default:
-            setenv("display_stack", "unknown");
+            ds = "unknown";
             printf("sp_hw_probe: Unknown display!\n");
     }
 
@@ -833,14 +833,8 @@ int board_late_init(void)
         c = 1;
     }
 
-    cur = getenv("panel_type");
-    if (cur == NULL || strcmp(cur, pt)) {
-        setenv("panel_type", pt);
-        c = 1;
-    }
-
     if (c == 1) {
-        saveenv();
+       saveenv();
     }
 #endif
 	run_command("setenv outputmode panel", 0);
