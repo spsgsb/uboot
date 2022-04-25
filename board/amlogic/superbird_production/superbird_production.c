@@ -728,6 +728,21 @@ int32_t plat_i2c_read(uint32_t addr, uint32_t reg, uint8_t* buffer, size_t buffe
 }
 #endif
 
+static void set_dtbo_idx(void)
+{
+	// this is required for DTBO read logic to actually
+	// apply the overlay, otherwise it will be ignored
+	const char *dtbo_idx = getenv("androidboot.dtbo_idx");
+	const char *expected_dtbo_idx = "0";
+	if (dtbo_idx == NULL || strcmp(dtbo_idx, expected_dtbo_idx)) {
+		setenv("androidboot.dtbo_idx", expected_dtbo_idx);
+		saveenv();
+		printf("%s(): overriding dtbo_idx\n", __func__);
+	} else {
+		printf("%s(): androidboot.dtbo_idx=%s\n", __func__, dtbo_idx);
+	}
+}
+
 #ifdef CONFIG_BOARD_LATE_INIT
 int board_late_init(void)
 {
@@ -867,6 +882,7 @@ int board_late_init(void)
 		setenv("board_defined_bootup", "bootup_D3");
 	}
 	/**/
+	set_dtbo_idx();
 	aml_config_dtb();
 	return 0;
 }
