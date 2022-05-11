@@ -167,6 +167,13 @@ static void consume_boot_try(AvbABSlotData* slot) {
     slot->successful_boot = 0;
 }
 
+static void consume_all_boot_tries(AvbABSlotData* slot) {
+    if (slot->tries_remaining > 0) {
+        slot->tries_remaining = 0;
+    }
+    slot->successful_boot = 0;
+}
+
 static bool should_failover(AvbABSlotData* slot) {
     return slot->tries_remaining <= 0 || slot->tries_remaining > AVB_AB_MAX_TRIES_REMAINING;
 }
@@ -426,6 +433,34 @@ int do_ConsumeBootTry (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]
 
 }
 
+int do_ConsumeAllBootTries (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]) {
+    char miscbuf[MISCBUF_SIZE] = {0};
+    AvbABData info;
+    int slot;
+
+    if (has_boot_slot == 0) {
+        printf("device is not ab mode\n");
+        return -1;
+    }
+
+    boot_info_open_partition(miscbuf);
+    boot_info_load(&info, miscbuf);
+
+    if (!boot_info_validate(&info)) {
+        printf("boot-info is invalid. Resetting.\n");
+        boot_info_reset(&info);
+        boot_info_save(&info, miscbuf);
+    }
+
+    slot = get_active_slot(&info);
+
+    consume_all_boot_tries(&(info.slots[slot]));
+
+    boot_info_save(&info, miscbuf);
+
+    return 0;
+}
+
 #endif /* CONFIG_BOOTLOADER_CONTROL_BLOCK */
 
 U_BOOT_CMD(
@@ -463,3 +498,11 @@ U_BOOT_CMD(
     "\nThis command consumes 1 boot try\n"
     "So you can execute command: consume_boot_try"
 );
+
+U_BOOT_CMD(
+    consume_all_boot_tries, 1, 0, do_ConsumeAllBootTries,
+    "consume_all_boot_tries",
+    "\nThis command consumes all boot tries\n"
+    "So you can execute command: consume_all_boot_tries"
+)
+

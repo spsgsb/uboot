@@ -744,6 +744,49 @@ static void set_dtbo_idx(void)
 	}
 }
 
+void read_gpio_key_for_ab_swap(void) 
+{
+	int err = 0;
+	int back, preset1 = 0;
+	int seconds_to_swap = 5;
+
+	// Set pinmux to gpio periphs for GPIOA
+	writel(0x0000, PERIPHS_PIN_MUX_D);
+	// Turn off internal pull resistors for GPIOA
+	writel(0x0000, PAD_PULL_UP_EN_REG5);
+
+	err = gpio_request(GPIOEE(GPIOA_5), "GPIOA_5");
+	if (err && err != -EBUSY) {
+		printf("gpio: requesting pin %u failed\n",
+			GPIOEE(GPIOA_5));
+		return;
+	}
+	err = gpio_request(GPIOEE(GPIOA_0), "GPIOA_0");
+	if (err && err != -EBUSY) {
+		printf("gpio: requesting pin %u failed\n",
+			GPIOEE(GPIOA_5));
+		return;
+	}
+
+	gpio_direction_input(GPIOEE(GPIOA_5));
+	gpio_direction_input(GPIOEE(GPIOA_0));
+
+	back = gpio_get_value(GPIOEE(GPIOA_5));
+	preset1 = gpio_get_value(GPIOEE(GPIOA_0));
+
+	printf("gpio: back: %d, preset1: %d\n", back, preset1);
+
+	while (!back && !preset1 && seconds_to_swap > 0) {
+		seconds_to_swap--;
+		mdelay(1000);
+		back = gpio_get_value(GPIOEE(GPIOA_5));
+		preset1 = gpio_get_value(GPIOEE(GPIOA_0));
+		printf("seconds to ab swap %d\n  ", seconds_to_swap);
+	}
+	if (seconds_to_swap < 1) {
+		run_command("consume_all_boot_tries;", 0);
+	}
+}
 
 #ifdef CONFIG_BOARD_LATE_INIT
 int board_late_init(void)
@@ -885,6 +928,7 @@ int board_late_init(void)
 	}
 	/**/
 	set_dtbo_idx();
+	read_gpio_key_for_ab_swap();
 	aml_config_dtb();
 	return 0;
 }
@@ -971,7 +1015,7 @@ int checkhw(char * name)
 	}
 	strcpy(name, loc_name);
 	setenv("aml_dt", loc_name);
-        printf("Detected HW: %s\n", loc_name);
+    printf("Detected HW: %s\n", loc_name);
 	return 0;
 }
 #endif
