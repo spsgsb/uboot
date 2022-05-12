@@ -57,6 +57,9 @@
 #include <spotify/hw_probe.h>
 #include <asm/saradc.h>
 #endif
+#ifdef CONFIG_SPOTIFY_AVB
+#include <spotify/avb.h>
+#endif
 #include <asm/arch/eth_setup.h>
 #include <phy.h>
 #include <linux/mtd/partitions.h>
@@ -744,6 +747,31 @@ static void set_dtbo_idx(void)
 	}
 }
 
+#ifdef CONFIG_SPOTIFY_AVB
+
+void ab_failover(void) {
+	char miscbuf[MISCBUF_SIZE] = {0};
+	AvbABData info;
+	int slot;
+
+	slot = get_active_slot(&info);
+	printf("boot-info failover triggered for slot: %d\n", slot);
+
+	boot_info_open_partition(miscbuf);
+    boot_info_load(&info, miscbuf);
+
+    if (!boot_info_validate(&info)) {
+        printf("boot-info is invalid. Resetting.\n");
+        boot_info_reset(&info);
+        boot_info_save(&info, miscbuf);
+    }
+
+	boot_info_failover(&info);
+	boot_info_save(&info, miscbuf);
+	slot = get_active_slot(&info);
+	printf("active slot = %d\n", slot);
+}
+
 void read_gpio_key_for_ab_swap(void) 
 {
 	int back, preset1 = 0;
@@ -759,10 +787,10 @@ void read_gpio_key_for_ab_swap(void)
 		mdelay(1000);
 		back = gpio_get_value(GPIOEE(GPIOA_5));
 		preset1 = gpio_get_value(GPIOEE(GPIOA_0));
-		printf("seconds to ab swap %d\n  ", seconds_to_swap);
+		printf("seconds to ab swap %d\n", seconds_to_swap);
 	}
 	if (seconds_to_swap < 1) {
-		run_command("consume_all_boot_tries;", 0);
+		ab_failover();
 	}
 }
 
@@ -780,7 +808,7 @@ void read_gpio_key_for_user_data_reset(void) {
 		mdelay(1000);
 		back = gpio_get_value(GPIOEE(GPIOA_5));
 		preset2 = gpio_get_value(GPIOEE(GPIOA_1));
-		printf("seconds to user data reset %d\n  ", seconds_to_reset);
+		printf("seconds to user data reset %d\n", seconds_to_reset);
 	}
 	if (seconds_to_reset < 1) {
 		setenv("firstboot", "1");
@@ -831,7 +859,7 @@ void read_gpio_key_combos(void) {
 	read_gpio_key_for_ab_swap();
 	read_gpio_key_for_user_data_reset();
 }
-
+#endif
 
 #ifdef CONFIG_BOARD_LATE_INIT
 int board_late_init(void)
@@ -973,7 +1001,9 @@ int board_late_init(void)
 	}
 	/**/
 	set_dtbo_idx();
+#ifdef CONFIG_SPOTIFY_AVB
 	read_gpio_key_combos();
+#endif
 	aml_config_dtb();
 	return 0;
 }
