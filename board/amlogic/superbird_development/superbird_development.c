@@ -746,9 +746,51 @@ static void set_dtbo_idx(void)
 
 void read_gpio_key_for_ab_swap(void) 
 {
-	int err = 0;
 	int back, preset1 = 0;
 	int seconds_to_swap = 5;
+	
+	back = gpio_get_value(GPIOEE(GPIOA_5));
+	preset1 = gpio_get_value(GPIOEE(GPIOA_0));
+
+	printf("gpio: back: %d, preset1: %d\n", back, preset1);
+
+	while (!back && !preset1 && seconds_to_swap > 0) {
+		seconds_to_swap--;
+		mdelay(1000);
+		back = gpio_get_value(GPIOEE(GPIOA_5));
+		preset1 = gpio_get_value(GPIOEE(GPIOA_0));
+		printf("seconds to ab swap %d\n  ", seconds_to_swap);
+	}
+	if (seconds_to_swap < 1) {
+		run_command("consume_all_boot_tries;", 0);
+	}
+}
+
+void read_gpio_key_for_user_data_reset(void) {
+	int back, preset2 = 0;
+	int seconds_to_reset = 5;
+	
+	back = gpio_get_value(GPIOEE(GPIOA_5));
+	preset2 = gpio_get_value(GPIOEE(GPIOA_1));
+
+	printf("gpio: back: %d, preset2: %d\n", back, preset2);
+
+	while (!back && !preset2 && seconds_to_reset > 0) {
+		seconds_to_reset--;
+		mdelay(1000);
+		back = gpio_get_value(GPIOEE(GPIOA_5));
+		preset2 = gpio_get_value(GPIOEE(GPIOA_1));
+		printf("seconds to user data reset %d\n  ", seconds_to_reset);
+	}
+	if (seconds_to_reset < 1) {
+		setenv("firstboot", "1");
+		saveenv();
+	}
+}
+
+void read_gpio_key_combos(void) {
+	int err = 0;
+
 	u32 mux, pullup_reg;
 	mux = readl(PERIPHS_PIN_MUX_D);
 	pullup_reg = readl(PAD_PULL_UP_EN_REG5);
@@ -772,28 +814,22 @@ void read_gpio_key_for_ab_swap(void)
 	err = gpio_request(GPIOEE(GPIOA_0), "GPIOA_0");
 	if (err && err != -EBUSY) {
 		printf("gpio: requesting pin %u failed\n",
-			GPIOEE(GPIOA_5));
+			GPIOEE(GPIOA_0));
+		return;
+	}
+	err = gpio_request(GPIOEE(GPIOA_1), "GPIOA_1");
+	if (err && err != -EBUSY) {
+		printf("gpio: requesting pin %u failed\n",
+			GPIOEE(GPIOA_1));
 		return;
 	}
 
 	gpio_direction_input(GPIOEE(GPIOA_5));
 	gpio_direction_input(GPIOEE(GPIOA_0));
+	gpio_direction_input(GPIOEE(GPIOA_1));
 
-	back = gpio_get_value(GPIOEE(GPIOA_5));
-	preset1 = gpio_get_value(GPIOEE(GPIOA_0));
-
-	printf("gpio: back: %d, preset1: %d\n", back, preset1);
-
-	while (!back && !preset1 && seconds_to_swap > 0) {
-		seconds_to_swap--;
-		mdelay(1000);
-		back = gpio_get_value(GPIOEE(GPIOA_5));
-		preset1 = gpio_get_value(GPIOEE(GPIOA_0));
-		printf("seconds to ab swap %d\n  ", seconds_to_swap);
-	}
-	if (seconds_to_swap < 1) {
-		run_command("consume_all_boot_tries;", 0);
-	}
+	read_gpio_key_for_ab_swap();
+	read_gpio_key_for_user_data_reset();
 }
 
 #ifdef CONFIG_BOARD_LATE_INIT
@@ -936,7 +972,7 @@ int board_late_init(void)
 	}
 	/**/
 	set_dtbo_idx();
-	read_gpio_key_for_ab_swap();
+	read_gpio_key_combos();
 	aml_config_dtb();
 	return 0;
 }
