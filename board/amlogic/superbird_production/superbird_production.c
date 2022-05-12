@@ -749,11 +749,19 @@ void read_gpio_key_for_ab_swap(void)
 	int err = 0;
 	int back, preset1 = 0;
 	int seconds_to_swap = 5;
+	u32 mux, pullup_reg;
+	mux = readl(PERIPHS_PIN_MUX_D);
+	pullup_reg = readl(PAD_PULL_UP_EN_REG5);
 
-	// Set pinmux to gpio periphs for GPIOA
-	writel(0x0000, PERIPHS_PIN_MUX_D);
-	// Turn off internal pull resistors for GPIOA
-	writel(0x0000, PAD_PULL_UP_EN_REG5);
+	printf("gpio: GPIOA_0-7 mux: %u, GPIOA_0-15 pullupreg: %u\n", mux, pullup_reg);
+	pullup_reg &= 0xFFC0;
+	mux &= 0xFFFFF300;
+	printf("gpio: GPIOA_0-7 mux: %u, GPIOA_0-15 pullupreg: %u\n", mux, pullup_reg);
+	
+	// Set pinmux to gpio periphs for GPIOA_0-3 and 5
+	writel(mux, PERIPHS_PIN_MUX_D);
+	// Turn off internal pull resistors for GPIOA_0 to GPIOA_5
+	writel(pullup_reg, PAD_PULL_UP_EN_REG5);
 
 	err = gpio_request(GPIOEE(GPIOA_5), "GPIOA_5");
 	if (err && err != -EBUSY) {
