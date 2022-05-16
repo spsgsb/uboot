@@ -57,6 +57,9 @@
 #include <spotify/hw_probe.h>
 #include <asm/saradc.h>
 #endif
+#ifdef CONFIG_SPOTIFY_AVB
+#include <spotify/avb.h>
+#endif
 #include <asm/arch/eth_setup.h>
 #include <phy.h>
 #include <linux/mtd/partitions.h>
@@ -744,6 +747,121 @@ static void set_dtbo_idx(void)
 	}
 }
 
+#ifdef CONFIG_SPOTIFY_AVB
+
+void ab_failover(void) {
+	char miscbuf[MISCBUF_SIZE] = {0};
+	AvbABData info;
+	int slot;
+
+	slot = get_active_slot(&info);
+	printf("boot-info failover triggered for slot: %d\n", slot);
+
+	boot_info_open_partition(miscbuf);
+    boot_info_load(&info, miscbuf);
+
+    if (!boot_info_validate(&info)) {
+        printf("boot-info is invalid. Resetting.\n");
+        boot_info_reset(&info);
+        boot_info_save(&info, miscbuf);
+    }
+
+	boot_info_failover(&info);
+	boot_info_save(&info, miscbuf);
+	slot = get_active_slot(&info);
+
+	printf("active slot = %d\n", slot);
+}
+
+void read_gpio_key_for_ab_swap(void) 
+{
+	int back, preset1 = 0;
+	int seconds_to_swap = 5;
+	
+	back = gpio_get_value(GPIOEE(GPIOA_5));
+	preset1 = gpio_get_value(GPIOEE(GPIOA_0));
+
+	printf("gpio: back: %d, preset1: %d\n", back, preset1);
+
+	while (!back && !preset1 && seconds_to_swap > 0) {
+		seconds_to_swap--;
+		mdelay(1000);
+		back = gpio_get_value(GPIOEE(GPIOA_5));
+		preset1 = gpio_get_value(GPIOEE(GPIOA_0));
+		printf("seconds to ab swap %d\n", seconds_to_swap);
+	}
+	if (seconds_to_swap < 1) {
+		ab_failover();
+	}
+}
+
+void read_gpio_key_for_user_data_reset(void) {
+	int back, preset2 = 0;
+	int seconds_to_reset = 5;
+	
+	back = gpio_get_value(GPIOEE(GPIOA_5));
+	preset2 = gpio_get_value(GPIOEE(GPIOA_1));
+
+	printf("gpio: back: %d, preset2: %d\n", back, preset2);
+
+	while (!back && !preset2 && seconds_to_reset > 0) {
+		seconds_to_reset--;
+		mdelay(1000);
+		back = gpio_get_value(GPIOEE(GPIOA_5));
+		preset2 = gpio_get_value(GPIOEE(GPIOA_1));
+		printf("seconds to user data reset %d\n", seconds_to_reset);
+	}
+	if (seconds_to_reset < 1) {
+		setenv("firstboot", "1");
+		saveenv();
+	}
+}
+
+void read_gpio_key_combos(void) {
+	int err = 0;
+
+	u32 mux, pullup_reg;
+	mux = readl(PERIPHS_PIN_MUX_D);
+	pullup_reg = readl(PAD_PULL_UP_EN_REG5);
+
+	printf("gpio: GPIOA_0-7 mux: %u, GPIOA_0-15 pullupreg: %u\n", mux, pullup_reg);
+	pullup_reg &= 0xFFC0;
+	mux &= 0xFFFFF300;
+	printf("gpio: GPIOA_0-7 mux: %u, GPIOA_0-15 pullupreg: %u\n", mux, pullup_reg);
+	
+	// Set pinmux to gpio periphs for GPIOA_0-3 and 5
+	writel(mux, PERIPHS_PIN_MUX_D);
+	// Turn off internal pull resistors for GPIOA_0 to GPIOA_5
+	writel(pullup_reg, PAD_PULL_UP_EN_REG5);
+
+	err = gpio_request(GPIOEE(GPIOA_5), "GPIOA_5");
+	if (err && err != -EBUSY) {
+		printf("gpio: requesting pin %u failed\n",
+			GPIOEE(GPIOA_5));
+		return;
+	}
+	err = gpio_request(GPIOEE(GPIOA_0), "GPIOA_0");
+	if (err && err != -EBUSY) {
+		printf("gpio: requesting pin %u failed\n",
+			GPIOEE(GPIOA_0));
+		return;
+	}
+	err = gpio_request(GPIOEE(GPIOA_1), "GPIOA_1");
+	if (err && err != -EBUSY) {
+		printf("gpio: requesting pin %u failed\n",
+			GPIOEE(GPIOA_1));
+		return;
+	}
+
+	gpio_direction_input(GPIOEE(GPIOA_5));
+	gpio_direction_input(GPIOEE(GPIOA_0));
+	gpio_direction_input(GPIOEE(GPIOA_1));
+
+	read_gpio_key_for_ab_swap();
+	read_gpio_key_for_user_data_reset();
+}
+
+#endif
 
 #ifdef CONFIG_BOARD_LATE_INIT
 int board_late_init(void)
@@ -885,6 +1003,9 @@ int board_late_init(void)
 	}
 	/**/
 	set_dtbo_idx();
+#ifdef CONFIG_SPOTIFY_AVB
+	read_gpio_key_combos();
+#endif
 	aml_config_dtb();
 	return 0;
 }
@@ -971,7 +1092,7 @@ int checkhw(char * name)
 	}
 	strcpy(name, loc_name);
 	setenv("aml_dt", loc_name);
-        printf("Detected HW: %s\n", loc_name);
+    printf("Detected HW: %s\n", loc_name);
 	return 0;
 }
 #endif
